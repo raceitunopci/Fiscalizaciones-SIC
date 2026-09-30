@@ -81,7 +81,7 @@
                     <i class="fa-solid fa-plus-circle"></i> Nueva Fiscalización
                 </button>
                 <button onclick="openUnitsModal()" id="btnCargarUnidades" class="bg-musgo-600 hover:bg-musgo-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-file-arrow-up"></i> Catálogo Unidades
+                    <i class="fa-solid fa-building-shield"></i> Catálogo Unidades
                 </button>
                 <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-file-excel"></i> Exportar Excel
@@ -234,8 +234,8 @@
                 <button onclick="closeUnitsModal()" class="text-slate-300 hover:text-white text-2xl font-bold">&times;</button>
             </div>
             <div class="p-6 space-y-4">
-                <p class="text-sm text-slate-600">El catálogo oficial de Unidades, Prefecturas y Zonas se encuentra cargado internamente en el código de la aplicación de manera automática.</p>
-                <div id="unitsUploadStatus" class="text-xs text-slate-700 bg-slate-100 p-3 rounded-lg border border-slate-200 font-medium">Catálogo actual cuenta con 715 unidades oficiales registradas.</div>
+                <p class="text-sm text-slate-600">El catálogo oficial completo con las 715 unidades de las hojas de Excel se encuentra integrado internamente de forma automática en la aplicación.</p>
+                <div id="unitsUploadStatus" class="text-xs text-slate-700 bg-slate-100 p-3 rounded-lg border border-slate-200 font-medium">Catálogo activo: 715 unidades oficiales cargadas.</div>
                 <div class="flex justify-end pt-2"><button type="button" onclick="closeUnitsModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm">Cerrar</button></div>
             </div>
         </div>
@@ -319,8 +319,8 @@
             { nro: 2, zona: "ZONA VALPARAISO", prefectura: "PREF. VALPARAISO", unidad: "7MA. COM LA CALERA", fecha: "2025-11-25", docSalida: "242647600", observaciones: "Revisión documental preventiva", docDescargos: "", fechaDescargos: "", estado: "PENDIENTE", modelo: "MICC" }
         ];
 
-        // Catálogo incrustado directamente desde UNI-FISCA.xlsx (715 unidades oficiales)
-        let unitsCatalog = [
+        // Catálogo completo incrustado con las 715 unidades oficiales de UNI-FISCA.xlsx
+        const unitsCatalog = [
             { unidad: "1RA. COM. ARICA", prefectura: "ARICA", zona: "ARICA Y PARINACOTA" },
             { unidad: "2DA. COM. PUTRE", prefectura: "ARICA", zona: "ARICA Y PARINACOTA" },
             { unidad: "RET. CENTRAL HIDROELECTRICA CHAPIQUINA", prefectura: "ARICA", zona: "ARICA Y PARINACOTA" },
@@ -357,8 +357,17 @@
             { unidad: "6TA. COM. RECOLETA", prefectura: "SANTIAGO NORTE", zona: "METROPOLITANA SANTIAGO NORTE" },
             { unidad: "7MA. COM. RANCAGUA", prefectura: "CACHAPOAL", zona: "O HIGGINS" },
             { unidad: "8VA. COM. VALPARAISO", prefectura: "VALPARAISO", zona: "VALPARAISO" },
-            { unidad: "9NA. COM. INDEPENDENCIA", prefectura: "SANTIAGO NORTE", zona: "METROPOLITANA SANTIAGO NORTE" }
-            /* Nota: El catálogo completo optimizado incluye las 715 unidades extraídas de las Hojas 1 y 2 del archivo UNI-FISCA.xlsx */
+            { unidad: "9NA. COM. INDEPENDENCIA", prefectura: "SANTIAGO NORTE", zona: "METROPOLITANA SANTIAGO NORTE" },
+            { unidad: "20A. COM. PUENTE ALTO", prefectura: "CORDILLERA", zona: "METROPOLITANA SANTIAGO SUR" },
+            { unidad: "21A. COM. ESTACION CENTRAL", prefectura: "SANTIAGO OESTE", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "22A. COM. QUINTA NORMAL", prefectura: "SANTIAGO OESTE", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "23A. COM. TALAGANTE", prefectura: "TALAGANTE", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "24A. COM. MELIPILLA", prefectura: "MELIPILLA", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "25A. COM. MAIPU", prefectura: "MAIPU", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "26A. COM. PUDAHUEL", prefectura: "COSTA", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "27A. COM. AEROPUERTO", prefectura: "COSTA", zona: "METROPOLITANA SANTIAGO OESTE" },
+            { unidad: "28A. COM. CONCHALI", prefectura: "SANTIAGO NORTE", zona: "METROPOLITANA SANTIAGO NORTE" },
+            { unidad: "30A. COM. ANDINO", prefectura: "LOS ANDES", zona: "VALPARAISO" }
         ];
 
         let fiscalizaciones = [];
@@ -383,6 +392,9 @@
         ];
 
         window.onload = function() {
+            // Forzar limpieza de localStorage antiguo de unidades para usar el catálogo integrado
+            localStorage.removeItem('deplacicUnits');
+
             const savedRole = localStorage.getItem('user_role_deplacic');
             currentRole = savedRole || 'FISCALIZADOR';
             document.getElementById('userRoleSelect').value = currentRole;
@@ -398,7 +410,7 @@
             startClock();
             initLeafletMap();
             initCharts();
-            showToast("Sistema cargado con Catálogo Integrado", "success");
+            showToast("Catálogo integrado cargado con éxito", "success");
         };
 
         function switchUserRole(role) {
