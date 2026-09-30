@@ -230,7 +230,7 @@
                 </div>
             </div>
 
-            <!-- Mapa Leaflet Interactivo de Chile (Esri World Street Map) -->
+            <!-- Mapa Leaflet Interactivo de Chile -->
             <div id="cardMap" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -241,7 +241,6 @@
                     </button>
                 </div>
                 <div class="chile-map-container h-72 w-full border border-slate-200 shadow-inner relative" id="leafletMap">
-                    <!-- Contenedor Leaflet inicializado por JS -->
                 </div>
             </div>
         </div>
@@ -296,7 +295,6 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-slate-200 text-sm text-slate-700 bg-white">
-                        <!-- Inyectado dinámicamente -->
                     </tbody>
                 </table>
             </div>
@@ -338,29 +336,25 @@
         </div>
     </div>
 
-    <!-- Modal Ampliar Mapa Geográfico (Leaflet) -->
+    <!-- Modal Ampliar Mapa -->
     <div id="mapModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-slate-900 rounded-2xl shadow-2xl max-w-5xl w-full overflow-hidden border border-musgo-600 my-8 flex flex-col">
             <div class="bg-musgo-800 text-white px-6 py-4 flex justify-between items-center border-b border-musgo-600">
                 <h3 class="text-lg font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-map-location-dot text-amber-400"></i> Mapa Geográfico Ampliado • Chile (Esri World Street Map)
+                    <i class="fa-solid fa-map-location-dot text-amber-400"></i> Mapa Geográfico Ampliado
                 </h3>
                 <button onclick="closeMapModal()" class="text-slate-300 hover:text-white text-2xl font-bold">&times;</button>
             </div>
             <div class="p-6 flex flex-col md:flex-row items-center justify-center bg-slate-950 relative min-h-[520px] gap-6">
-                <!-- Mapa Leaflet Grande -->
                 <div class="relative h-[480px] w-full md:w-3/5 rounded-xl overflow-hidden border border-musgo-700 bg-slate-900 shadow-inner" id="leafletMapModal">
                 </div>
-                <!-- Lista Sincronizada -->
                 <div class="w-full md:w-2/5 flex flex-col h-[480px] bg-slate-900 rounded-xl border border-musgo-700 p-4 overflow-y-auto space-y-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2"><i class="fa-solid fa-list-check"></i> Prefecturas Geográficas</h4>
-                    <div id="modalPrefecturesList" class="space-y-2">
-                        <!-- Inyectado dinámicamente -->
-                    </div>
+                    <div id="modalPrefecturesList" class="space-y-2"></div>
                 </div>
             </div>
             <div class="bg-slate-900 px-6 py-4 flex justify-between items-center border-t border-musgo-600">
-                <p class="text-xs text-slate-400"><i class="fa-solid fa-circle-info text-amber-400"></i> Haga clic en cualquier pin o prefectura para filtrar el registro en la planilla.</p>
+                <p class="text-xs text-slate-400"><i class="fa-solid fa-circle-info text-amber-400"></i> Haga clic en cualquier pin o prefectura para filtrar el registro.</p>
                 <button type="button" onclick="closeMapModal()" class="px-5 py-2 bg-musgo-600 hover:bg-musgo-700 text-white font-medium rounded-lg text-sm transition">Cerrar</button>
             </div>
         </div>
@@ -385,14 +379,13 @@
                     <button type="button" onclick="exportExpandedChartImage()" class="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white font-medium rounded-lg text-sm transition flex items-center gap-2">
                         <i class="fa-solid fa-download"></i> Exportar Imagen para Word
                     </button>
-                    <p class="text-xs text-slate-500 hidden sm:inline"><i class="fa-solid fa-circle-info text-musgo-600"></i> Vista detallada basada en filtros activos.</p>
                 </div>
                 <button type="button" onclick="closeChartModal()" class="px-5 py-2 bg-musgo-600 hover:bg-musgo-700 text-white font-medium rounded-lg text-sm transition">Cerrar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Ver Detalle de Fiscalización -->
+    <!-- Modal Ver Detalle -->
     <div id="viewModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden border border-slate-200 my-8">
             <div class="bg-musgo-800 text-white px-6 py-4 flex justify-between items-center">
@@ -403,65 +396,25 @@
             </div>
             <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto text-sm text-slate-700">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Zona</p>
-                        <p id="viewZona" class="font-bold text-slate-900 mt-0.5">-</p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Prefectura</p>
-                        <p id="viewPrefectura" class="font-bold text-slate-900 mt-0.5">-</p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Unidad</p>
-                        <p id="viewUnidad" class="font-bold text-slate-900 mt-0.5">-</p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Fecha Fiscalización</p>
-                        <p id="viewFecha" class="font-medium text-slate-900 mt-0.5">-</p>
-                    </div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Zona</p><p id="viewZona" class="font-bold text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Prefectura</p><p id="viewPrefectura" class="font-bold text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Unidad</p><p id="viewUnidad" class="font-bold text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Fecha Fiscalización</p><p id="viewFecha" class="font-medium text-slate-900 mt-0.5">-</p></div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Doc. Electrónico Salida</p>
-                        <p id="viewDocSalida" class="font-mono font-medium text-slate-900 mt-1">-</p>
-                    </div>
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Modelo</p>
-                        <p id="viewModelo" class="font-bold text-musgo-700 mt-1">-</p>
-                    </div>
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Estado de Tramitación</p>
-                        <p id="viewEstado" class="font-bold mt-1">-</p>
-                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="text-xs font-semibold text-slate-400 uppercase">Doc. Salida</p><p id="viewDocSalida" class="font-mono font-medium text-slate-900 mt-1">-</p></div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="text-xs font-semibold text-slate-400 uppercase">Modelo</p><p id="viewModelo" class="font-bold text-musgo-700 mt-1">-</p></div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="text-xs font-semibold text-slate-400 uppercase">Estado</p><p id="viewEstado" class="font-bold mt-1">-</p></div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Doc. Electrónico Descargos</p>
-                        <p id="viewDocDescargos" class="font-mono font-medium text-slate-900 mt-1">-</p>
-                    </div>
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <p class="text-xs font-semibold text-slate-400 uppercase">Fecha Descargos</p>
-                        <p id="viewFechaDescargos" class="font-medium text-slate-900 mt-1">-</p>
-                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="text-xs font-semibold text-slate-400 uppercase">Doc. Descargos</p><p id="viewDocDescargos" class="font-mono font-medium text-slate-900 mt-1">-</p></div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="text-xs font-semibold text-slate-400 uppercase">Fecha Descargos</p><p id="viewFechaDescargos" class="font-medium text-slate-900 mt-1">-</p></div>
                 </div>
-
                 <div class="space-y-3">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase mb-1">Observaciones</p>
-                        <div id="viewObservaciones" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 min-h-[40px]">-</div>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase mb-1">Observaciones Adicionales</p>
-                        <div id="viewObsAdicionales" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 min-h-[40px]">-</div>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase mb-1">Cursos de Acción</p>
-                        <div id="viewCursosAccion" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 min-h-[40px]">-</div>
-                    </div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase mb-1">Observaciones</p><div id="viewObservaciones" class="p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[40px]">-</div></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase mb-1">Observaciones Adicionales</p><div id="viewObsAdicionales" class="p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[40px]">-</div></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase mb-1">Cursos de Acción</p><div id="viewCursosAccion" class="p-3 bg-slate-50 rounded-lg border border-slate-200 min-h-[40px]">-</div></div>
                 </div>
-
                 <div class="flex justify-end pt-4 border-t border-slate-200">
                     <button type="button" onclick="closeViewModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm transition">Cerrar</button>
                 </div>
@@ -480,80 +433,48 @@
             </div>
             <form id="fiscalizacionForm" onsubmit="saveFiscalizacion(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
                 <input type="hidden" id="editIndex" value="">
-                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Unidad *</label>
-                        <input type="text" id="fUnidad" list="unitsList" oninput="onUnidadInput(this.value)" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none" placeholder="Seleccione o escriba Unidad">
-                        <datalist id="unitsList">
-                            <!-- Opciones cargadas dinámicamente -->
-                        </datalist>
+                        <input type="text" id="fUnidad" list="unitsList" oninput="onUnidadInput(this.value)" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600" placeholder="Seleccione Unidad">
+                        <datalist id="unitsList"></datalist>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Prefectura *</label>
-                        <input type="text" id="fPrefectura" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none" placeholder="Ej. PREF. COQUIMBO">
+                        <input type="text" id="fPrefectura" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Zona del País</label>
-                        <input type="text" id="fZona" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none" placeholder="Ej. ZONA COQUIMBO">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha Fiscalización</label>
-                        <input type="date" id="fFecha" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Doc. Electrónico Salida</label>
-                        <input type="text" id="fDocSalida" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none" placeholder="Ord. N° ...">
-                    </div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Zona</label><input type="text" id="fZona" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha</label><input type="date" id="fFecha" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Doc. Salida</label><input type="text" id="fDocSalida" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Modelo *</label>
-                        <select id="fModelo" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none bg-white">
+                        <select id="fModelo" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white">
                             <option value="MICC">MICC</option>
                             <option value="SIN MICC">SIN MICC</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Estado de Tramitación *</label>
-                        <select id="fEstado" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none bg-white">
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Estado *</label>
+                        <select id="fEstado" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white">
                             <option value="FINALIZADA">FINALIZADA</option>
                             <option value="PENDIENTE">PENDIENTE</option>
                             <option value="EN TRAMITE">EN TRAMITE</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Doc. Electrónico Descargos</label>
-                        <input type="text" id="fDocDescargos" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none" placeholder="Ord. N° ...">
-                    </div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Doc. Descargos</label><input type="text" id="fDocDescargos" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha Descargos</label>
-                        <input type="date" id="fFechaDescargos" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones</label>
-                        <textarea id="fObservaciones" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none" placeholder="Detalle de la fiscalización..."></textarea>
-                    </div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha Descargos</label><input type="date" id="fFechaDescargos" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones</label><textarea id="fObservaciones" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones Adicionales</label>
-                        <textarea id="fObsAdicionales" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Cursos de Acción</label>
-                        <textarea id="fCursosAccion" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-musgo-600 focus:outline-none"></textarea>
-                    </div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Obs. Adicionales</label><textarea id="fObsAdicionales" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Cursos de Acción</label><textarea id="fCursosAccion" rows="2" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
                 </div>
-
                 <div class="flex justify-end gap-3 pt-4 border-t border-slate-200">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm transition">Cancelar</button>
                     <button type="submit" class="px-5 py-2 bg-musgo-600 hover:bg-musgo-700 text-white font-medium rounded-lg text-sm shadow transition">Guardar Registro</button>
@@ -565,21 +486,16 @@
     <!-- Notificación Toast -->
     <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-slate-800 text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-slate-700">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toastMessage" class="text-sm font-medium">Operación realizada con éxito</span>
+        <span id="toastMessage" class="text-sm font-medium">Operación realizada</span>
     </div>
 
     <script>
         // ============================================================
         // CONFIGURACIÓN GOOGLE APPS SCRIPT
         // ============================================================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzSsFi0cGO8btPb3p6c0XwPZydK7zyRZM6kENozFj8b6M-aFDbo0HgBQq9swV_3PF_s/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxUPAw-nAU7t6nvYocxUgNYKp2qGPpDrqD1qAZvhz-8Sx2cyFp5IY0U-xnVVehGZWPRrA/exec';
         const API_TIMEOUT = 15000;
 
-        // ============================================================
-        // COMUNICACIÓN CON GOOGLE SHEETS
-        // Lectura: JSONP (funciona desde GitHub Pages sin depender de CORS).
-        // Escritura: POST simple/no-cors; después se verifica recargando desde Sheets.
-        // ============================================================
         function apiRead(action) {
             return new Promise((resolve, reject) => {
                 const callbackName = '__deplacic_cb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
@@ -617,9 +533,6 @@
 
         async function apiWrite(action, data = null) {
             const payload = JSON.stringify({ action, data });
-
-            // text/plain evita un preflight CORS. El resultado se verifica
-            // leyendo nuevamente los datos desde Google Sheets.
             try {
                 await fetch(API_URL, {
                     method: 'POST',
@@ -652,36 +565,8 @@
         }
 
         const defaultData = [
-            {
-                nro: 1,
-                zona: "ZONA COQUIMBO",
-                prefectura: "PREF. COQUIMBO",
-                unidad: "2DA. COM COQUIMBO",
-                fecha: "2025-11-21",
-                docSalida: "242442087",
-                observaciones: "Fiscalización inicial programa MICC",
-                docDescargos: "245823413",
-                fechaDescargos: "2026-01-14",
-                estado: "FINALIZADA",
-                modelo: "MICC",
-                obsAdicionales: "Sin observaciones",
-                cursosAccion: "Implementado"
-            },
-            {
-                nro: 2,
-                zona: "ZONA VALPARAISO",
-                prefectura: "PREF. VALPARAISO",
-                unidad: "7MA. COM LA CALERA",
-                fecha: "2025-11-25",
-                docSalida: "242647600",
-                observaciones: "Revisión documental preventiva",
-                docDescargos: "",
-                fechaDescargos: "",
-                estado: "PENDIENTE",
-                modelo: "MICC",
-                obsAdicionales: "",
-                cursosAccion: "Reiterar oficio"
-            }
+            { nro: 1, zona: "ZONA COQUIMBO", prefectura: "PREF. COQUIMBO", unidad: "2DA. COM COQUIMBO", fecha: "2025-11-21", docSalida: "242442087", observaciones: "Fiscalización inicial programa MICC", docDescargos: "245823413", fechaDescargos: "2026-01-14", estado: "FINALIZADA", modelo: "MICC", obsAdicionales: "Sin observaciones", cursosAccion: "Implementado" },
+            { nro: 2, zona: "ZONA VALPARAISO", prefectura: "PREF. VALPARAISO", unidad: "7MA. COM LA CALERA", fecha: "2025-11-25", docSalida: "242647600", observaciones: "Revisión documental preventiva", docDescargos: "", fechaDescargos: "", estado: "PENDIENTE", modelo: "MICC", obsAdicionales: "", cursosAccion: "Reiterar oficio" }
         ];
 
         let fiscalizaciones = [];
@@ -689,199 +574,85 @@
         let filteredData = [];
         let currentPage = 1;
         const rowsPerPage = 10;
-        let currentRole = "FISCALIZADOR"; // "FISCALIZADOR" o "VISUALIZADOR"
+        let currentRole = "FISCALIZADOR";
 
         let statusChartInstance = null;
         let prefecturaChartInstance = null;
         let expandedChartInstance = null;
         let currentExpandedChartType = 'status';
-
         let mapInstance = null;
         let modalMapInstance = null;
 
         const chilePrefecturesCoords = [
-            { name: "PREF. ARICA", lat: -18.4783, lng: -70.3126 },
-            { name: "PREF. IQUIQUE", lat: -20.2133, lng: -70.1503 },
-            { name: "PREF. ANTOFAGASTA", lat: -23.6509, lng: -70.3975 },
-            { name: "PREF. ATACAMA", lat: -27.3665, lng: -70.3323 },
-            { name: "PREF. COQUIMBO", lat: -29.9533, lng: -71.3436 },
-            { name: "PREF. VALPARAISO", lat: -33.0472, lng: -71.6127 },
-            { name: "PREF. SANTIAGO", lat: -33.4489, lng: -70.6693 },
-            { name: "PREF. RANCAGUA", lat: -34.1708, lng: -70.7444 },
-            { name: "PREF. TALCA", lat: -35.4264, lng: -71.6554 },
-            { name: "PREF. CONCEPCION", lat: -36.8270, lng: -73.0498 },
-            { name: "PREF. TEMUCO", lat: -38.7359, lng: -72.5904 },
-            { name: "PREF. VALDIVIA", lat: -39.8196, lng: -73.2452 },
-            { name: "PREF. PUERTO MONTT", lat: -41.4693, lng: -72.9424 },
-            { name: "PREF. COYHAIQUE", lat: -45.5752, lng: -72.0662 },
+            { name: "PREF. ARICA", lat: -18.4783, lng: -70.3126 }, { name: "PREF. IQUIQUE", lat: -20.2133, lng: -70.1503 },
+            { name: "PREF. ANTOFAGASTA", lat: -23.6509, lng: -70.3975 }, { name: "PREF. ATACAMA", lat: -27.3665, lng: -70.3323 },
+            { name: "PREF. COQUIMBO", lat: -29.9533, lng: -71.3436 }, { name: "PREF. VALPARAISO", lat: -33.0472, lng: -71.6127 },
+            { name: "PREF. SANTIAGO", lat: -33.4489, lng: -70.6693 }, { name: "PREF. RANCAGUA", lat: -34.1708, lng: -70.7444 },
+            { name: "PREF. TALCA", lat: -35.4264, lng: -71.6554 }, { name: "PREF. CONCEPCION", lat: -36.8270, lng: -73.0498 },
+            { name: "PREF. TEMUCO", lat: -38.7359, lng: -72.5904 }, { name: "PREF. VALDIVIA", lat: -39.8196, lng: -73.2452 },
+            { name: "PREF. PUERTO MONTT", lat: -41.4693, lng: -72.9424 }, { name: "PREF. COYHAIQUE", lat: -45.5752, lng: -72.0662 },
             { name: "PREF. MAGALLANES", lat: -53.1638, lng: -70.9171 }
         ];
 
         async function initApp() {
             const savedRole = localStorage.getItem('user_role_deplacic');
-
             currentRole = savedRole || 'FISCALIZADOR';
             document.getElementById('userRoleSelect').value = currentRole;
-
-            fiscalizaciones = [];
-            unitsCatalog = [];
-
-            applyRolePermissions();
-            updateUnitsDatalist();
-            filterData();
-            startClock();
-            initLeafletMaps();
-
-            // La fuente principal ahora es Google Sheets.
+            fiscalizaciones = []; unitsCatalog = [];
+            applyRolePermissions(); updateUnitsDatalist(); filterData(); startClock(); initLeafletMaps();
             await refreshFromCloud(true);
         }
 
         function switchUserRole(role) {
             currentRole = role;
             localStorage.setItem('user_role_deplacic', currentRole);
-            applyRolePermissions();
-            renderTable();
+            applyRolePermissions(); renderTable();
             showToast(`Cambiado a perfil: ${currentRole}`, "info");
         }
 
         function applyRolePermissions() {
-            const btnNueva = document.getElementById('btnNuevaFiscalizacion');
-            const btnCargar = document.getElementById('btnCargarUnidades');
-            const btnRestaurar = document.getElementById('btnRestaurar');
-            const alertBanner = document.getElementById('roleAlertBanner');
-            const alertText = document.getElementById('roleAlertText');
-            const alertIcon = document.getElementById('roleAlertIcon');
-            const badgeLabel = document.getElementById('roleBadgeLabel');
-
+            const btnNueva = document.getElementById('btnNuevaFiscalizacion'), btnCargar = document.getElementById('btnCargarUnidades'), btnRestaurar = document.getElementById('btnRestaurar'), alertBanner = document.getElementById('roleAlertBanner'), alertText = document.getElementById('roleAlertText'), alertIcon = document.getElementById('roleAlertIcon'), badgeLabel = document.getElementById('roleBadgeLabel');
             if (currentRole === 'VISUALIZADOR') {
-                if (btnNueva) btnNueva.classList.add('hidden');
-                if (btnCargar) btnCargar.classList.add('hidden');
-                if (btnRestaurar) btnRestaurar.classList.add('hidden');
-
+                if (btnNueva) btnNueva.classList.add('hidden'); if (btnCargar) btnCargar.classList.add('hidden'); if (btnRestaurar) btnRestaurar.classList.add('hidden');
                 alertBanner.className = "bg-sky-50 border-l-4 border-sky-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-sky-900";
                 alertIcon.className = "fa-solid fa-eye text-sky-600 text-lg";
                 alertText.innerHTML = "Modo <strong>Visualizador</strong> activo: Acceso de solo lectura para consulta de estadísticas, mapas y registros.";
-                badgeLabel.className = "font-semibold uppercase tracking-wider text-[10px] bg-sky-200 px-2 py-0.5 rounded text-sky-900";
-                badgeLabel.innerText = "Solo Lectura";
+                badgeLabel.className = "font-semibold uppercase tracking-wider text-[10px] bg-sky-200 px-2 py-0.5 rounded text-sky-900"; badgeLabel.innerText = "Solo Lectura";
             } else {
-                if (btnNueva) btnNueva.classList.remove('hidden');
-                if (btnCargar) btnCargar.classList.remove('hidden');
-                if (btnRestaurar) btnRestaurar.classList.remove('hidden');
-
+                if (btnNueva) btnNueva.classList.remove('hidden'); if (btnCargar) btnCargar.classList.remove('hidden'); if (btnRestaurar) btnRestaurar.classList.remove('hidden');
                 alertBanner.className = "bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-amber-900";
                 alertIcon.className = "fa-solid fa-circle-exclamation text-amber-600 text-lg";
                 alertText.innerHTML = "Modo <strong>Fiscalizador</strong> activo: Puede ingresar, editar, eliminar registros y cargar catálogos.";
-                badgeLabel.className = "font-semibold uppercase tracking-wider text-[10px] bg-amber-200 px-2 py-0.5 rounded text-amber-900";
-                badgeLabel.innerText = "Control Total";
+                badgeLabel.className = "font-semibold uppercase tracking-wider text-[10px] bg-amber-200 px-2 py-0.5 rounded text-amber-900"; badgeLabel.innerText = "Control Total";
             }
         }
 
         function setLayout(layoutType) {
             const container = document.getElementById('dynamicDashboardContainer');
-            const btnClassic = document.getElementById('layoutClassicBtn');
-            const btnAnalytics = document.getElementById('layoutAnalyticsBtn');
-            const btnGeospatial = document.getElementById('layoutGeospatialBtn');
-
-            [btnClassic, btnAnalytics, btnGeospatial].forEach(b => {
-                b.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5";
-            });
+            const btnClassic = document.getElementById('layoutClassicBtn'), btnAnalytics = document.getElementById('layoutAnalyticsBtn'), btnGeospatial = document.getElementById('layoutGeospatialBtn');
+            [btnClassic, btnAnalytics, btnGeospatial].forEach(b => { b.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5"; });
 
             if (layoutType === 'classic') {
                 container.className = "grid grid-cols-1 lg:grid-cols-3 gap-6";
-                container.innerHTML = `
-                    <div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-musgo-700"></i> Estado de Tramitación</h3>
-                            <div class="flex items-center gap-2">
-                                <button onclick="exportChartImage('status')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition" title="Exportar gráfico como imagen para Word"><i class="fa-solid fa-download"></i> Exportar</button>
-                                <button onclick="openChartModal('status')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button>
-                            </div>
-                        </div>
-                        <div class="relative h-64 flex items-center justify-center"><canvas id="statusChart"></canvas></div>
-                    </div>
-                    <div id="cardPrefecturaChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-ranking-star text-amber-500"></i> Prefecturas Principales</h3>
-                            <div class="flex items-center gap-2">
-                                <button onclick="exportChartImage('prefectura')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition" title="Exportar gráfico como imagen para Word"><i class="fa-solid fa-download"></i> Exportar</button>
-                                <button onclick="openChartModal('prefectura')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button>
-                            </div>
-                        </div>
-                        <div class="relative h-64 flex items-center justify-center"><canvas id="prefecturaChart"></canvas></div>
-                    </div>
-                    <div id="cardMap" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-musgo-700"></i> Mapa Geográfico • Chile</h3>
-                            <button onclick="openMapModal()" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar Mapa</button>
-                        </div>
-                        <div class="chile-map-container h-72 w-full border border-slate-200 shadow-inner relative" id="leafletMap"></div>
-                    </div>
-                `;
+                container.innerHTML = `<div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between"><div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-musgo-700"></i> Estado de Tramitación</h3><div class="flex items-center gap-2"><button onclick="exportChartImage('status')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition"><i class="fa-solid fa-download"></i> Exportar</button><button onclick="openChartModal('status')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button></div></div><div class="relative h-64 flex items-center justify-center"><canvas id="statusChart"></canvas></div></div><div id="cardPrefecturaChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between"><div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-ranking-star text-amber-500"></i> Prefecturas Principales</h3><div class="flex items-center gap-2"><button onclick="exportChartImage('prefectura')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition"><i class="fa-solid fa-download"></i> Exportar</button><button onclick="openChartModal('prefectura')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button></div></div><div class="relative h-64 flex items-center justify-center"><canvas id="prefecturaChart"></canvas></div></div><div id="cardMap" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between"><div class="flex items-center justify-between mb-2"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-musgo-700"></i> Mapa Geográfico • Chile</h3><button onclick="openMapModal()" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar Mapa</button></div><div class="chile-map-container h-72 w-full border border-slate-200 shadow-inner relative" id="leafletMap"></div></div>`;
                 btnClassic.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
             } else if (layoutType === 'analytics') {
                 container.className = "grid grid-cols-1 lg:grid-cols-2 gap-6";
-                container.innerHTML = `
-                    <div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-musgo-700"></i> Estado de Tramitación</h3>
-                            <div class="flex items-center gap-2">
-                                <button onclick="exportChartImage('status')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition" title="Exportar gráfico como imagen para Word"><i class="fa-solid fa-download"></i> Exportar</button>
-                                <button onclick="openChartModal('status')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button>
-                            </div>
-                        </div>
-                        <div class="relative h-72 flex items-center justify-center"><canvas id="statusChart"></canvas></div>
-                    </div>
-                    <div id="cardPrefecturaChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-ranking-star text-amber-500"></i> Prefecturas Principales</h3>
-                            <div class="flex items-center gap-2">
-                                <button onclick="exportChartImage('prefectura')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition" title="Exportar gráfico como imagen para Word"><i class="fa-solid fa-download"></i> Exportar</button>
-                                <button onclick="openChartModal('prefectura')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button>
-                            </div>
-                        </div>
-                        <div class="relative h-72 flex items-center justify-center"><canvas id="prefecturaChart"></canvas></div>
-                    </div>
-                `;
+                container.innerHTML = `<div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between"><div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-musgo-700"></i> Estado de Tramitación</h3><div class="flex items-center gap-2"><button onclick="exportChartImage('status')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition"><i class="fa-solid fa-download"></i> Exportar</button><button onclick="openChartModal('status')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button></div></div><div class="relative h-72 flex items-center justify-center"><canvas id="statusChart"></canvas></div></div><div id="cardPrefecturaChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between"><div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-ranking-star text-amber-500"></i> Prefecturas Principales</h3><div class="flex items-center gap-2"><button onclick="exportChartImage('prefectura')" class="text-xs text-slate-700 hover:text-slate-900 font-semibold flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition"><i class="fa-solid fa-download"></i> Exportar</button><button onclick="openChartModal('prefectura')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button></div></div><div class="relative h-72 flex items-center justify-center"><canvas id="prefecturaChart"></canvas></div></div>`;
                 btnAnalytics.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
             } else if (layoutType === 'geospatial') {
                 container.className = "grid grid-cols-1 lg:grid-cols-3 gap-6";
-                container.innerHTML = `
-                    <div id="cardMap" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between lg:col-span-2">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-musgo-700"></i> Mapa Geográfico Ampliado • Chile</h3>
-                            <button onclick="openMapModal()" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar Mapa</button>
-                        </div>
-                        <div class="chile-map-container h-80 w-full border border-slate-200 shadow-inner relative" id="leafletMap"></div>
-                    </div>
-                    <div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-musgo-700"></i> Estado de Tramitación</h3>
-                            <button onclick="openChartModal('status')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button>
-                        </div>
-                        <div class="relative h-64 flex items-center justify-center"><canvas id="statusChart"></canvas></div>
-                    </div>
-                `;
+                container.innerHTML = `<div id="cardMap" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between lg:col-span-2"><div class="flex items-center justify-between mb-2"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-musgo-700"></i> Mapa Geográfico Ampliado • Chile</h3><button onclick="openMapModal()" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar Mapa</button></div><div class="chile-map-container h-80 w-full border border-slate-200 shadow-inner relative" id="leafletMap"></div></div><div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between"><div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-chart-pie text-musgo-700"></i> Estado de Tramitación</h3><button onclick="openChartModal('status')" class="text-xs text-musgo-700 hover:text-musgo-900 font-semibold flex items-center gap-1 bg-musgo-50 px-2.5 py-1 rounded-lg border border-musgo-200 transition"><i class="fa-solid fa-expand"></i> Ampliar</button></div><div class="relative h-64 flex items-center justify-center"><canvas id="statusChart"></canvas></div></div>`;
                 btnGeospatial.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
             }
-
-            mapInstance = null;
-            initLeafletMaps();
-            updateCharts();
+            mapInstance = null; initLeafletMaps(); updateCharts();
         }
 
         function initLeafletMaps() {
             if (!document.getElementById('leafletMap')) return;
             if (!mapInstance) {
-                mapInstance = L.map('leafletMap', {
-                    zoomControl: false,
-                    attributionControl: false
-                }).setView([-35.6751, -71.5430], 4);
-
-                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                    maxZoom: 10,
-                    minZoom: 3,
-                    attribution: 'Tiles &copy; Esri'
-                }).addTo(mapInstance);
+                mapInstance = L.map('leafletMap', { zoomControl: false, attributionControl: false }).setView([-35.6751, -71.5430], 4);
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 10, minZoom: 3, attribution: 'Tiles &copy; Esri' }).addTo(mapInstance);
             }
             renderLeafletMarkers(mapInstance, false);
         }
@@ -889,15 +660,8 @@
         function renderLeafletMapsModal() {
             setTimeout(() => {
                 if (!modalMapInstance) {
-                    modalMapInstance = L.map('leafletMapModal', {
-                        attributionControl: false
-                    }).setView([-35.6751, -71.5430], 4);
-
-                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-                        maxZoom: 12,
-                        minZoom: 3,
-                        attribution: 'Tiles &copy; Esri'
-                    }).addTo(modalMapInstance);
+                    modalMapInstance = L.map('leafletMapModal', { attributionControl: false }).setView([-35.6751, -71.5430], 4);
+                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', { maxZoom: 12, minZoom: 3, attribution: 'Tiles &copy; Esri' }).addTo(modalMapInstance);
                 } else {
                     modalMapInstance.invalidateSize();
                 }
@@ -906,62 +670,26 @@
         }
 
         function renderLeafletMarkers(targetMap, isModal) {
-            targetMap.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    targetMap.removeLayer(layer);
-                }
-            });
-
+            targetMap.eachLayer(layer => { if (layer instanceof L.Marker) targetMap.removeLayer(layer); });
             const listContainer = document.getElementById('modalPrefecturesList');
             if (isModal && listContainer) listContainer.innerHTML = '';
-
             chilePrefecturesCoords.forEach(pref => {
                 const count = fiscalizaciones.filter(f => (f.prefectura || '').toUpperCase().includes(pref.name.replace('PREF. ', ''))).length;
-
-                const customIcon = L.divIcon({
-                    className: 'custom-leaflet-pin',
-                    html: `<div style="background-color: #243e30; color: #f59e0b; font-weight: bold; font-size: 11px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #f59e0b; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.4);">${count}</div>`,
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14]
-                });
-
+                const customIcon = L.divIcon({ className: 'custom-leaflet-pin', html: `<div style="background-color: #243e30; color: #f59e0b; font-weight: bold; font-size: 11px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid #f59e0b; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.4);">${count}</div>`, iconSize: [28, 28], iconAnchor: [14, 14] });
                 const marker = L.marker([pref.lat, pref.lng], { icon: customIcon }).addTo(targetMap);
                 marker.bindPopup(`<div style="font-family: Inter, sans-serif;"><strong style="color: #243e30; font-size: 13px;">${pref.name}</strong><br><span style="font-size: 12px; color: #475569;">Fiscalizaciones: <strong>${count}</strong></span></div>`);
-
-                marker.on('click', () => {
-                    document.getElementById('searchInput').value = pref.name.replace('PREF. ', '');
-                    filterData();
-                    if (isModal) closeMapModal();
-                });
-
+                marker.on('click', () => { document.getElementById('searchInput').value = pref.name.replace('PREF. ', ''); filterData(); if (isModal) closeMapModal(); });
                 if (isModal && listContainer) {
-                    const div = document.createElement('div');
-                    div.className = "flex items-center justify-between p-2.5 bg-slate-950 rounded-lg border border-musgo-800 text-xs hover:border-amber-500 cursor-pointer transition";
-                    div.onclick = () => {
-                        document.getElementById('searchInput').value = pref.name.replace('PREF. ', '');
-                        filterData();
-                        closeMapModal();
-                    };
-                    div.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                            <span class="font-bold text-slate-200">${pref.name}</span>
-                        </div>
-                        <span class="px-2 py-0.5 bg-musgo-700/60 text-emerald-300 rounded font-semibold">${count} fiscalizaciones</span>
-                    `;
+                    const div = document.createElement('div'); div.className = "flex items-center justify-between p-2.5 bg-slate-950 rounded-lg border border-musgo-800 text-xs hover:border-amber-500 cursor-pointer transition";
+                    div.onclick = () => { document.getElementById('searchInput').value = pref.name.replace('PREF. ', ''); filterData(); closeMapModal(); };
+                    div.innerHTML = `<div class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-amber-400"></i><span class="font-bold text-slate-200">${pref.name}</span></div><span class="px-2 py-0.5 bg-musgo-700/60 text-emerald-300 rounded font-semibold">${count} fiscalizaciones</span>`;
                     listContainer.appendChild(div);
                 }
             });
         }
 
-        function openMapModal() {
-            document.getElementById('mapModal').classList.remove('hidden');
-            renderLeafletMapsModal();
-        }
-
-        function closeMapModal() {
-            document.getElementById('mapModal').classList.add('hidden');
-        }
+        function openMapModal() { document.getElementById('mapModal').classList.remove('hidden'); renderLeafletMapsModal(); }
+        function closeMapModal() { document.getElementById('mapModal').classList.add('hidden'); }
 
         function openChartModal(type) {
             currentExpandedChartType = type;
@@ -975,677 +703,227 @@
                 const finalizadasCount = dataset.filter(i => i.estado === 'FINALIZADA').length;
                 const pendientesCount = dataset.filter(i => i.estado === 'PENDIENTE').length;
                 const tramiteCount = dataset.filter(i => i.estado === 'EN TRAMITE').length;
-
-                expandedChartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Finalizadas', 'Pendientes', 'En Trámite'],
-                        datasets: [{
-                            data: [finalizadasCount, pendientesCount, tramiteCount],
-                            backgroundColor: ['#10b981', '#f59e0b', '#3d6b52'],
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom', labels: { font: { size: 13, family: 'Inter' } } }
-                        }
-                    }
-                });
+                expandedChartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: ['Finalizadas', 'Pendientes', 'En Trámite'], datasets: [{ data: [finalizadasCount, pendientesCount, tramiteCount], backgroundColor: ['#10b981', '#f59e0b', '#3d6b52'], borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 13, family: 'Inter' } } } } } });
             } else {
                 document.getElementById('chartModalTitle').innerHTML = `<i class="fa-solid fa-ranking-star text-amber-400"></i> Detalle Ampliado • Prefecturas Principales`;
-                const prefCounts = {};
-                dataset.forEach(i => {
-                    const pref = i.prefectura || 'S/N';
-                    prefCounts[pref] = (prefCounts[pref] || 0) + 1;
-                });
+                const prefCounts = {}; dataset.forEach(i => { const pref = i.prefectura || 'S/N'; prefCounts[pref] = (prefCounts[pref] || 0) + 1; });
                 const sortedPrefs = Object.entries(prefCounts).sort((a,b) => b[1] - a[1]);
-                const prefLabels = sortedPrefs.map(item => item[0]);
-                const prefData = sortedPrefs.map(item => item[1]);
-
-                expandedChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: prefLabels.length > 0 ? prefLabels : ['Sin registros'],
-                        datasets: [{
-                            label: 'Cantidad de Fiscalizaciones',
-                            data: prefData.length > 0 ? prefData : [0],
-                            backgroundColor: '#3d6b52',
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { beginAtZero: true, ticks: { stepSize: 1 } }
-                        }
-                    }
-                });
+                expandedChartInstance = new Chart(ctx, { type: 'bar', data: { labels: sortedPrefs.length > 0 ? sortedPrefs.map(item => item[0]) : ['Sin registros'], datasets: [{ label: 'Cantidad', data: sortedPrefs.length > 0 ? sortedPrefs.map(item => item[1]) : [0], backgroundColor: '#3d6b52', borderRadius: 6 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } } } });
             }
         }
 
         function exportChartImage(type) {
-            let chartObj = null;
-            let filename = '';
-            if (type === 'status') {
-                chartObj = statusChartInstance;
-                filename = 'estado_tramitacion_deplacic.png';
-            } else if (type === 'prefectura') {
-                chartObj = prefecturaChartInstance;
-                filename = 'prefecturas_principales_deplacic.png';
-            }
-
-            if (!chartObj) {
-                showToast("El gráfico no está disponible para exportar", "error");
-                return;
-            }
-
-            const sourceCanvas = chartObj.canvas;
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = sourceCanvas.width;
-            tempCanvas.height = sourceCanvas.height;
-            const tCtx = tempCanvas.getContext('2d');
-            
-            tCtx.fillStyle = '#FFFFFF';
-            tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-            tCtx.drawImage(sourceCanvas, 0, 0);
-
-            const imageUrl = tempCanvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Gráfico exportado con fondo blanco con éxito", "success");
+            let chartObj = type === 'status' ? statusChartInstance : prefecturaChartInstance;
+            let filename = type === 'status' ? 'estado_tramitacion.png' : 'prefecturas.png';
+            if (!chartObj) return showToast("El gráfico no está disponible", "error");
+            const tempCanvas = document.createElement('canvas'); tempCanvas.width = chartObj.canvas.width; tempCanvas.height = chartObj.canvas.height;
+            const tCtx = tempCanvas.getContext('2d'); tCtx.fillStyle = '#FFFFFF'; tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height); tCtx.drawImage(chartObj.canvas, 0, 0);
+            const link = document.createElement('a'); link.href = tempCanvas.toDataURL('image/png'); link.download = filename; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            showToast("Gráfico exportado", "success");
         }
 
         function exportExpandedChartImage() {
             if (!expandedChartInstance) return;
             const filename = currentExpandedChartType === 'status' ? 'estado_tramitacion_ampliado.png' : 'prefecturas_ampliado.png';
-            
-            const sourceCanvas = expandedChartInstance.canvas;
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = sourceCanvas.width;
-            tempCanvas.height = sourceCanvas.height;
-            const tCtx = tempCanvas.getContext('2d');
-            
-            tCtx.fillStyle = '#FFFFFF';
-            tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-            tCtx.drawImage(sourceCanvas, 0, 0);
-
-            const imageUrl = tempCanvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Gráfico ampliado exportado con fondo blanco", "success");
+            const tempCanvas = document.createElement('canvas'); tempCanvas.width = expandedChartInstance.canvas.width; tempCanvas.height = expandedChartInstance.canvas.height;
+            const tCtx = tempCanvas.getContext('2d'); tCtx.fillStyle = '#FFFFFF'; tCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height); tCtx.drawImage(expandedChartInstance.canvas, 0, 0);
+            const link = document.createElement('a'); link.href = tempCanvas.toDataURL('image/png'); link.download = filename; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+            showToast("Gráfico exportado", "success");
         }
 
-        function closeChartModal() {
-            document.getElementById('chartModal').classList.add('hidden');
-        }
+        function closeChartModal() { document.getElementById('chartModal').classList.add('hidden'); }
 
         function startClock() {
             function updateClock() {
-                const now = new Date();
-                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const now = new Date(); const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
                 let dateStr = now.toLocaleDateString('es-CL', options);
                 document.getElementById('liveClock').innerText = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
             }
-            updateClock();
-            setInterval(updateClock, 1000);
-        }
-
-        function saveToLocalStorage() {
-            // Se conserva esta función por compatibilidad con el código existente.
-            // Los datos oficiales YA NO se guardan en localStorage: se guardan en Google Sheets.
-            document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
+            updateClock(); setInterval(updateClock, 1000);
         }
 
         async function resetData() {
-            if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: el perfil Visualizador no puede modificar datos.", "error");
-                return;
-            }
-
-            if (!confirm("¿Desea restaurar los datos iniciales? Esto reemplazará los registros actuales de Google Sheets.")) return;
-
+            if (currentRole === 'VISUALIZADOR') return showToast("Acceso denegado.", "error");
+            if (!confirm("¿Desea restaurar los datos iniciales?")) return;
             try {
                 await apiWrite('replaceFiscalizaciones', defaultData);
-                await new Promise(r => setTimeout(r, 800));
-                await refreshFromCloud(false);
-                showToast('Datos iniciales restaurados en Google Sheets', 'success');
-            } catch (error) {
-                console.error(error);
-                showToast('No fue posible restaurar los datos', 'error');
-            }
+                await new Promise(r => setTimeout(r, 800)); await refreshFromCloud(false);
+                showToast('Datos iniciales restaurados', 'success');
+            } catch (error) { showToast('Error al restaurar', 'error'); }
         }
 
         function openUnitsModal() {
-            if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: El perfil Visualizador no puede cargar catálogos.", "error");
-                return;
-            }
+            if (currentRole === 'VISUALIZADOR') return showToast("Acceso denegado.", "error");
             document.getElementById('unitsModal').classList.remove('hidden');
             document.getElementById('unitsUploadStatus').innerText = `Catálogo actual cuenta con ${unitsCatalog.length} unidades registradas.`;
         }
-
-        function closeUnitsModal() {
-            document.getElementById('unitsModal').classList.add('hidden');
-        }
+        function closeUnitsModal() { document.getElementById('unitsModal').classList.add('hidden'); }
 
         function handleUnitsFile(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = async function(evt) {
                 try {
-                    const data = new Uint8Array(evt.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-
-                    const extractedMap = new Map();
-                    unitsCatalog.forEach(u => extractedMap.set(u.unidad, u));
+                    const data = new Uint8Array(evt.target.result); const workbook = XLSX.read(data, { type: 'array' });
+                    const extractedMap = new Map(); unitsCatalog.forEach(u => extractedMap.set(u.unidad, u));
 
                     workbook.SheetNames.forEach(sheetName => {
-                        const worksheet = workbook.Sheets[sheetName];
-                        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        const worksheet = workbook.Sheets[sheetName]; const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                         if (json.length === 0) return;
-
                         let unitCol = -1, prefCol = -1, zonaCol = -1;
-
                         for (let r = 0; r < Math.min(json.length, 8); r++) {
-                            const row = json[r];
-                            if (!row) continue;
+                            const row = json[r]; if (!row) continue;
                             for (let c = 0; c < row.length; c++) {
                                 const val = row[c] ? row[c].toString().trim().toUpperCase() : '';
-                                if (val.includes('UNIDAD') || val.includes('COMISARIA') || val.includes('DESTACAMENTO')) unitCol = c;
+                                if (val.includes('UNIDAD') || val.includes('COMISARIA')) unitCol = c;
                                 if (val.includes('PREFECTURA') || val.includes('PREF')) prefCol = c;
                                 if (val.includes('ZONA')) zonaCol = c;
                             }
                             if (unitCol !== -1 && prefCol !== -1) break;
                         }
-
-                        if (prefCol === -1) prefCol = 1;
-                        if (unitCol === -1) unitCol = 2;
-
+                        if (prefCol === -1) prefCol = 1; if (unitCol === -1) unitCol = 2;
                         for (let i = 0; i < json.length; i++) {
-                            const row = json[i];
-                            if (!row || row.length === 0) continue;
-
+                            const row = json[i]; if (!row || row.length === 0) continue;
                             let unidad = unitCol !== -1 && row[unitCol] !== undefined ? row[unitCol].toString().trim().toUpperCase() : '';
                             let prefectura = prefCol !== -1 && row[prefCol] !== undefined ? row[prefCol].toString().trim().toUpperCase() : '';
                             let zona = zonaCol !== -1 && row[zonaCol] !== undefined ? row[zonaCol].toString().trim().toUpperCase() : '';
-
-                            if (!unidad || !isNaN(unidad) || unidad === 'NRO.' || unidad === 'UNIDAD') {
-                                for (let c = 0; c < row.length; c++) {
-                                    const cellStr = row[c] ? row[c].toString().trim().toUpperCase() : '';
-                                    if (cellStr.includes('COM') || cellStr.includes('TENEN') || cellStr.includes('RETEN') || cellStr.includes('SUBCOM') || cellStr.length > 5) {
-                                        if (isNaN(cellStr) && !['OBSERVACIONES','FINALIZADO','PENDIENTE','MICC'].includes(cellStr)) {
-                                            unidad = cellStr;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-
                             if (unidad && isNaN(unidad) && unidad !== 'UNIDAD' && unidad.length > 2) {
-                                extractedMap.set(unidad, {
-                                    unidad: unidad,
-                                    prefectura: (prefectura && isNaN(prefectura)) ? prefectura : 'PREFECTURA GENERAL',
-                                    zona: (zona && isNaN(zona)) ? zona : 'ZONA CHILE'
-                                });
+                                extractedMap.set(unidad, { unidad: unidad, prefectura: (prefectura && isNaN(prefectura)) ? prefectura : 'PREFECTURA GENERAL', zona: (zona && isNaN(zona)) ? zona : 'ZONA CHILE' });
                             }
                         }
                     });
-
                     unitsCatalog = Array.from(extractedMap.values());
-                    await apiWrite('saveUnidades', unitsCatalog);
-                    await new Promise(r => setTimeout(r, 800));
-                    await refreshFromCloud(false);
-
-                    document.getElementById('unitsUploadStatus').innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> ¡Éxito! Se han sincronizado ${unitsCatalog.length} unidades con Google Sheets.</span>`;
-                    showToast(`Se han guardado ${unitsCatalog.length} unidades en la nube`, 'success');
-                } catch (err) {
-                    console.error(err);
-                    showToast('Error al procesar o guardar el archivo.', 'error');
-                }
+                    await apiWrite('saveUnidades', unitsCatalog); await new Promise(r => setTimeout(r, 800)); await refreshFromCloud(false);
+                    document.getElementById('unitsUploadStatus').innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> Éxito.</span>`;
+                    showToast(`Guardadas ${unitsCatalog.length} unidades`, 'success');
+                } catch (err) { showToast('Error al procesar archivo', 'error'); }
             };
             reader.readAsArrayBuffer(file);
         }
 
         function updateUnitsDatalist() {
-            const datalist = document.getElementById('unitsList');
-            datalist.innerHTML = '';
-            unitsCatalog.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item.unidad;
-                opt.innerText = `${item.prefectura} - ${item.zona}`;
-                datalist.appendChild(opt);
-            });
+            const datalist = document.getElementById('unitsList'); datalist.innerHTML = '';
+            unitsCatalog.forEach(item => { const opt = document.createElement('option'); opt.value = item.unidad; opt.innerText = `${item.prefectura} - ${item.zona}`; datalist.appendChild(opt); });
             document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
         }
 
         function onUnidadInput(val) {
-            const upperVal = val.trim().toUpperCase();
-            const found = unitsCatalog.find(u => u.unidad === upperVal);
-            if (found) {
-                document.getElementById('fPrefectura').value = found.prefectura;
-                document.getElementById('fZona').value = found.zona;
-            }
+            const found = unitsCatalog.find(u => u.unidad === val.trim().toUpperCase());
+            if (found) { document.getElementById('fPrefectura').value = found.prefectura; document.getElementById('fZona').value = found.zona; }
         }
 
         function filterData() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const estadoFilter = document.getElementById('filterEstado').value;
-            const modeloFilter = document.getElementById('filterModelo').value;
-
+            const query = document.getElementById('searchInput').value.toLowerCase(), estadoFilter = document.getElementById('filterEstado').value, modeloFilter = document.getElementById('filterModelo').value;
             filteredData = fiscalizaciones.filter(item => {
-                const matchQuery = 
-                    (item.unidad && item.unidad.toLowerCase().includes(query)) ||
-                    (item.prefectura && item.prefectura.toLowerCase().includes(query)) ||
-                    (item.zona && item.zona.toLowerCase().includes(query)) ||
-                    (item.docSalida && item.docSalida.toLowerCase().includes(query)) ||
-                    (item.docDescargos && item.docDescargos.toLowerCase().includes(query)) ||
-                    (item.observaciones && item.observaciones.toLowerCase().includes(query)) ||
-                    (item.nro && item.nro.toString().includes(query));
-
-                const matchEstado = estadoFilter ? item.estado === estadoFilter : true;
-                const matchModelo = modeloFilter ? item.modelo === modeloFilter : true;
-
-                return matchQuery && matchEstado && matchModelo;
+                const matchQuery = (item.unidad && item.unidad.toLowerCase().includes(query)) || (item.prefectura && item.prefectura.toLowerCase().includes(query)) || (item.zona && item.zona.toLowerCase().includes(query)) || (item.docSalida && item.docSalida.toLowerCase().includes(query)) || (item.docDescargos && item.docDescargos.toLowerCase().includes(query)) || (item.observaciones && item.observaciones.toLowerCase().includes(query));
+                return matchQuery && (estadoFilter ? item.estado === estadoFilter : true) && (modeloFilter ? item.modelo === modeloFilter : true);
             });
-
-            currentPage = 1;
-            renderTable();
-            updateStats();
-            updateCharts();
-            if (mapInstance) renderLeafletMarkers(mapInstance, false);
+            currentPage = 1; renderTable(); updateStats(); updateCharts(); if (mapInstance) renderLeafletMarkers(mapInstance, false);
         }
 
         function renderTable() {
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
-
-            const start = (currentPage - 1) * rowsPerPage;
-            const end = start + rowsPerPage;
-            const paginatedItems = filteredData.slice(start, end);
-
+            const tableBody = document.getElementById('tableBody'); tableBody.innerHTML = '';
+            const start = (currentPage - 1) * rowsPerPage, end = start + rowsPerPage, paginatedItems = filteredData.slice(start, end);
             if (paginatedItems.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="12" class="px-6 py-8 text-center text-slate-400 font-medium">No se encontraron registros de fiscalización</td></tr>`;
-                document.getElementById('tableInfo').innerText = `Mostrando 0 de 0 registros`;
-                document.getElementById('pageIndicator').innerText = `Página 1 de 1`;
-                document.getElementById('prevBtn').disabled = true;
-                document.getElementById('nextBtn').disabled = true;
-                return;
+                tableBody.innerHTML = `<tr><td colspan="12" class="px-6 py-8 text-center text-slate-400 font-medium">No se encontraron registros</td></tr>`;
+                document.getElementById('tableInfo').innerText = `Mostrando 0 de 0 registros`; document.getElementById('pageIndicator').innerText = `Página 1 de 1`; return;
             }
-
             paginatedItems.forEach((item, idx) => {
                 const realIndex = fiscalizaciones.indexOf(item);
-                const displayNro = start + idx + 1;
-                
-                let modeloBadge = item.modelo === 'MICC' 
-                    ? '<span class="px-2 py-0.5 text-xs font-medium bg-musgo-50 text-musgo-700 border border-musgo-200 rounded">MICC</span>'
-                    : '<span class="px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 rounded">SIN MICC</span>';
-
-                let estadoBadgeClass = item.estado === 'FINALIZADA' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : item.estado === 'PENDIENTE' ? 'bg-amber-50 text-amber-800 border-amber-300' : 'bg-musgo-50 text-musgo-800 border-musgo-300';
-
-                let actionsHtml = `
-                    <div class="flex items-center justify-center gap-2">
-                        <button onclick="viewFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Visualizar registro">
-                            <i class="fa-solid fa-eye"></i> Ver
-                        </button>
-                `;
-
-                if (currentRole === 'FISCALIZADOR') {
-                    actionsHtml += `
-                        <button onclick="editFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-musgo-50 text-musgo-700 hover:bg-musgo-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Editar registro y descargos">
-                            <i class="fa-solid fa-pen-to-square"></i> Editar
-                        </button>
-                        <button onclick="deleteFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Eliminar registro">
-                            <i class="fa-solid fa-trash"></i> Eliminar
-                        </button>
-                    `;
-                }
-                actionsHtml += `</div>`;
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-semibold text-slate-900">${displayNro}</td>
-                    <td class="px-4 py-3 font-medium text-musgo-800 text-xs">${escapeHtml(item.zona || '-')}</td>
-                    <td class="px-4 py-3 font-medium text-slate-800">${escapeHtml(item.prefectura)}</td>
-                    <td class="px-4 py-3 text-slate-600">${escapeHtml(item.unidad)}</td>
-                    <td class="px-4 py-3 text-slate-600 whitespace-nowrap">${item.fecha || '-'}</td>
-                    <td class="px-4 py-3 text-slate-600 font-mono text-xs">${escapeHtml(item.docSalida || '-')}</td>
-                    <td class="px-4 py-3 text-slate-600 max-w-xs truncate" title="${escapeHtml(item.observaciones)}">${escapeHtml(item.observaciones || '-')}</td>
-                    <td class="px-4 py-3 text-slate-600 font-mono text-xs">${escapeHtml(item.docDescargos || '-')}</td>
-                    <td class="px-4 py-3 text-slate-600 whitespace-nowrap">${item.fechaDescargos || '-'}</td>
-                    <td class="px-4 py-3 whitespace-nowrap">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${estadoBadgeClass}">${escapeHtml(item.estado)}</span>
-                    </td>
-                    <td class="px-4 py-3 whitespace-nowrap">${modeloBadge}</td>
-                    <td class="px-4 py-3 text-center whitespace-nowrap">${actionsHtml}</td>
-                `;
-                tableBody.appendChild(tr);
+                let badge = item.modelo === 'MICC' ? '<span class="px-2 py-0.5 text-xs font-medium bg-musgo-50 text-musgo-700 border border-musgo-200 rounded">MICC</span>' : '<span class="px-2 py-0.5 text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 rounded">SIN MICC</span>';
+                let stClass = item.estado === 'FINALIZADA' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : item.estado === 'PENDIENTE' ? 'bg-amber-50 text-amber-800 border-amber-300' : 'bg-musgo-50 text-musgo-800 border-musgo-300';
+                let actions = `<div class="flex gap-2"><button onclick="viewFiscalizacion(${realIndex})" class="px-2 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded text-xs"><i class="fa-solid fa-eye"></i></button>`;
+                if (currentRole === 'FISCALIZADOR') actions += `<button onclick="editFiscalizacion(${realIndex})" class="px-2 py-1 bg-musgo-50 text-musgo-700 hover:bg-musgo-600 hover:text-white rounded text-xs"><i class="fa-solid fa-pen"></i></button><button onclick="deleteFiscalizacion(${realIndex})" class="px-2 py-1 bg-red-50 text-red-700 hover:bg-red-600 hover:text-white rounded text-xs"><i class="fa-solid fa-trash"></i></button>`;
+                actions += `</div>`;
+                tableBody.innerHTML += `<tr class="hover:bg-slate-50 border-b border-slate-100"><td class="px-4 py-3 font-semibold">${start + idx + 1}</td><td class="px-4 py-3 text-xs">${escapeHtml(item.zona || '-')}</td><td class="px-4 py-3">${escapeHtml(item.prefectura)}</td><td class="px-4 py-3">${escapeHtml(item.unidad)}</td><td class="px-4 py-3">${item.fecha || '-'}</td><td class="px-4 py-3 font-mono text-xs">${escapeHtml(item.docSalida || '-')}</td><td class="px-4 py-3 truncate max-w-xs">${escapeHtml(item.observaciones || '-')}</td><td class="px-4 py-3 font-mono text-xs">${escapeHtml(item.docDescargos || '-')}</td><td class="px-4 py-3">${item.fechaDescargos || '-'}</td><td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs border ${stClass}">${escapeHtml(item.estado)}</span></td><td class="px-4 py-3">${badge}</td><td class="px-4 py-3">${actions}</td></tr>`;
             });
-
             const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
             document.getElementById('tableInfo').innerText = `Mostrando ${start + 1} - ${Math.min(end, filteredData.length)} de ${filteredData.length} registros`;
             document.getElementById('pageIndicator').innerText = `Página ${currentPage} de ${totalPages}`;
-            document.getElementById('prevBtn').disabled = currentPage === 1;
-            document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+            document.getElementById('prevBtn').disabled = currentPage === 1; document.getElementById('nextBtn').disabled = currentPage >= totalPages;
         }
 
-        function changePage(direction) {
-            const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
-            currentPage += direction;
-            if (currentPage < 1) currentPage = 1;
-            if (currentPage > totalPages) currentPage = totalPages;
-            renderTable();
-        }
+        function changePage(dir) { currentPage += dir; renderTable(); }
 
         function updateStats() {
-            const total = fiscalizaciones.length;
-            const finalizadas = fiscalizaciones.filter(i => i.estado === 'FINALIZADA').length;
-            const pendientes = fiscalizaciones.filter(i => i.estado === 'PENDIENTE' || i.estado === 'EN TRAMITE').length;
-            const micc = fiscalizaciones.filter(i => i.modelo === 'MICC').length;
-
-            const finalizadasPct = total > 0 ? ((finalizadas / total) * 100).toFixed(1) : 0;
-            const pendientesPct = total > 0 ? ((pendientes / total) * 100).toFixed(1) : 0;
-            const miccPct = total > 0 ? ((micc / total) * 100).toFixed(1) : 0;
-
-            document.getElementById('statTotal').innerText = total;
-            document.getElementById('statFinalizadas').innerText = finalizadas;
-            document.getElementById('statFinalizadasSub').innerText = `${finalizadasPct}% del total general`;
-
-            document.getElementById('statPendientes').innerText = pendientes;
-            document.getElementById('statPendientesSub').innerText = `${pendientesPct}% del total general`;
-
-            document.getElementById('statMicc').innerText = micc;
-            document.getElementById('statMiccSub').innerText = `${miccPct}% del total general`;
-
-            document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
+            const total = fiscalizaciones.length, fin = fiscalizaciones.filter(i => i.estado === 'FINALIZADA').length, pen = fiscalizaciones.filter(i => i.estado === 'PENDIENTE' || i.estado === 'EN TRAMITE').length, micc = fiscalizaciones.filter(i => i.modelo === 'MICC').length;
+            document.getElementById('statTotal').innerText = total; document.getElementById('statFinalizadas').innerText = fin; document.getElementById('statFinalizadasSub').innerText = `${total ? (fin/total*100).toFixed(1) : 0}%`;
+            document.getElementById('statPendientes').innerText = pen; document.getElementById('statPendientesSub').innerText = `${total ? (pen/total*100).toFixed(1) : 0}%`;
+            document.getElementById('statMicc').innerText = micc; document.getElementById('statMiccSub').innerText = `${total ? (micc/total*100).toFixed(1) : 0}%`;
         }
 
         function updateCharts() {
             const dataset = filteredData;
-
-            const finalizadasCount = dataset.filter(i => i.estado === 'FINALIZADA').length;
-            const pendientesCount = dataset.filter(i => i.estado === 'PENDIENTE').length;
-            const tramiteCount = dataset.filter(i => i.estado === 'EN TRAMITE').length;
-
             const canvasStatus = document.getElementById('statusChart');
             if (canvasStatus) {
-                const ctxStatus = canvasStatus.getContext('2d');
                 if (statusChartInstance) statusChartInstance.destroy();
-                statusChartInstance = new Chart(ctxStatus, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Finalizadas', 'Pendientes', 'En Trámite'],
-                        datasets: [{
-                            data: [finalizadasCount, pendientesCount, tramiteCount],
-                            backgroundColor: ['#10b981', '#f59e0b', '#3d6b52'],
-                            borderWidth: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
-                        }
-                    }
-                });
+                statusChartInstance = new Chart(canvasStatus.getContext('2d'), { type: 'doughnut', data: { labels: ['Finalizadas', 'Pendientes', 'En Trámite'], datasets: [{ data: [dataset.filter(i => i.estado === 'FINALIZADA').length, dataset.filter(i => i.estado === 'PENDIENTE').length, dataset.filter(i => i.estado === 'EN TRAMITE').length], backgroundColor: ['#10b981', '#f59e0b', '#3d6b52'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } } });
             }
-
             const canvasPref = document.getElementById('prefecturaChart');
             if (canvasPref) {
-                const prefCounts = {};
-                dataset.forEach(i => {
-                    const pref = i.prefectura || 'S/N';
-                    prefCounts[pref] = (prefCounts[pref] || 0) + 1;
-                });
-                const sortedPrefs = Object.entries(prefCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
-                const prefLabels = sortedPrefs.map(item => item[0]);
-                const prefData = sortedPrefs.map(item => item[1]);
-
-                const ctxPref = canvasPref.getContext('2d');
+                const prefCounts = {}; dataset.forEach(i => { const pref = i.prefectura || 'S/N'; prefCounts[pref] = (prefCounts[pref] || 0) + 1; });
+                const sorted = Object.entries(prefCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
                 if (prefecturaChartInstance) prefecturaChartInstance.destroy();
-                prefecturaChartInstance = new Chart(ctxPref, {
-                    type: 'bar',
-                    data: {
-                        labels: prefLabels.length > 0 ? prefLabels : ['Sin registros'],
-                        datasets: [{
-                            label: 'Cant.',
-                            data: prefData.length > 0 ? prefData : [0],
-                            backgroundColor: '#f59e0b',
-                            borderRadius: 6
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { beginAtZero: true, ticks: { stepSize: 1 } }
-                        }
-                    }
-                });
+                prefecturaChartInstance = new Chart(canvasPref.getContext('2d'), { type: 'bar', data: { labels: sorted.length ? sorted.map(i => i[0]) : ['Sin registros'], datasets: [{ label: 'Cant.', data: sorted.length ? sorted.map(i => i[1]) : [0], backgroundColor: '#f59e0b', borderRadius: 6 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
             }
         }
 
         function viewFiscalizacion(index) {
-            const item = fiscalizaciones[index];
-            if (!item) return;
-
-            document.getElementById('viewZona').innerText = item.zona || '-';
-            document.getElementById('viewPrefectura').innerText = item.prefectura || '-';
-            document.getElementById('viewUnidad').innerText = item.unidad || '-';
-            document.getElementById('viewFecha').innerText = item.fecha || '-';
-            document.getElementById('viewDocSalida').innerText = item.docSalida || '-';
-            document.getElementById('viewModelo').innerText = item.modelo || '-';
-            
-            const estadoEl = document.getElementById('viewEstado');
-            estadoEl.innerText = item.estado || '-';
-            estadoEl.className = `font-bold mt-1 ${item.estado === 'FINALIZADA' ? 'text-emerald-600' : item.estado === 'PENDIENTE' ? 'text-amber-600' : 'text-musgo-700'}`;
-
-            document.getElementById('viewDocDescargos').innerText = item.docDescargos || 'Sin documento de descargos';
-            document.getElementById('viewFechaDescargos').innerText = item.fechaDescargos || '-';
-            document.getElementById('viewObservaciones').innerText = item.observaciones || 'Sin observaciones registradas.';
-            document.getElementById('viewObsAdicionales').innerText = item.obsAdicionales || 'Sin observaciones adicionales.';
-            document.getElementById('viewCursosAccion').innerText = item.cursosAccion || 'Sin cursos de acción especificados.';
-
+            const item = fiscalizaciones[index]; if (!item) return;
+            document.getElementById('viewZona').innerText = item.zona || '-'; document.getElementById('viewPrefectura').innerText = item.prefectura || '-'; document.getElementById('viewUnidad').innerText = item.unidad || '-'; document.getElementById('viewFecha').innerText = item.fecha || '-'; document.getElementById('viewDocSalida').innerText = item.docSalida || '-'; document.getElementById('viewModelo').innerText = item.modelo || '-';
+            const estadoEl = document.getElementById('viewEstado'); estadoEl.innerText = item.estado || '-'; estadoEl.className = `font-bold mt-1 ${item.estado === 'FINALIZADA' ? 'text-emerald-600' : item.estado === 'PENDIENTE' ? 'text-amber-600' : 'text-musgo-700'}`;
+            document.getElementById('viewDocDescargos').innerText = item.docDescargos || 'Sin descargos'; document.getElementById('viewFechaDescargos').innerText = item.fechaDescargos || '-'; document.getElementById('viewObservaciones').innerText = item.observaciones || 'Sin observaciones.'; document.getElementById('viewObsAdicionales').innerText = item.obsAdicionales || 'Sin adicionales.'; document.getElementById('viewCursosAccion').innerText = item.cursosAccion || 'Sin cursos de acción.';
             document.getElementById('viewModal').classList.remove('hidden');
         }
-
-        function closeViewModal() {
-            document.getElementById('viewModal').classList.add('hidden');
-        }
+        function closeViewModal() { document.getElementById('viewModal').classList.add('hidden'); }
 
         function openModal(index = null) {
-            if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: El perfil Visualizador no puede ingresar registros.", "error");
-                return;
-            }
+            if (currentRole === 'VISUALIZADOR') return showToast("Acceso denegado.", "error");
             document.getElementById('fiscalizacionModal').classList.remove('hidden');
             if (index !== null) {
-                document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editar Registro & Descargos`;
-                document.getElementById('editIndex').value = index;
-                const item = fiscalizaciones[index];
-                document.getElementById('fUnidad').value = item.unidad || '';
-                document.getElementById('fPrefectura').value = item.prefectura || '';
-                document.getElementById('fZona').value = item.zona || '';
-                document.getElementById('fFecha').value = item.fecha || '';
-                document.getElementById('fDocSalida').value = item.docSalida || '';
-                document.getElementById('fModelo').value = item.modelo || 'MICC';
-                document.getElementById('fEstado').value = item.estado || 'PENDIENTE';
-                document.getElementById('fDocDescargos').value = item.docDescargos || '';
-                document.getElementById('fFechaDescargos').value = item.fechaDescargos || '';
-                document.getElementById('fObservaciones').value = item.observaciones || '';
-                document.getElementById('fObsAdicionales').value = item.obsAdicionales || '';
-                document.getElementById('fCursosAccion').value = item.cursosAccion || '';
+                document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editar Registro`;
+                document.getElementById('editIndex').value = index; const item = fiscalizaciones[index];
+                document.getElementById('fUnidad').value = item.unidad || ''; document.getElementById('fPrefectura').value = item.prefectura || ''; document.getElementById('fZona').value = item.zona || ''; document.getElementById('fFecha').value = item.fecha || ''; document.getElementById('fDocSalida').value = item.docSalida || ''; document.getElementById('fModelo').value = item.modelo || 'MICC'; document.getElementById('fEstado').value = item.estado || 'PENDIENTE'; document.getElementById('fDocDescargos').value = item.docDescargos || ''; document.getElementById('fFechaDescargos').value = item.fechaDescargos || ''; document.getElementById('fObservaciones').value = item.observaciones || ''; document.getElementById('fObsAdicionales').value = item.obsAdicionales || ''; document.getElementById('fCursosAccion').value = item.cursosAccion || '';
             } else {
-                document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-pen"></i> Nueva Fiscalización`;
-                document.getElementById('editIndex').value = '';
-                document.getElementById('fiscalizacionForm').reset();
+                document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-file-pen"></i> Nueva Fiscalización`; document.getElementById('editIndex').value = ''; document.getElementById('fiscalizacionForm').reset();
             }
         }
-
-        function closeModal() {
-            document.getElementById('fiscalizacionModal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('fiscalizacionModal').classList.add('hidden'); }
 
         async function saveFiscalizacion(e) {
-            e.preventDefault();
-            if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: El perfil Visualizador no puede guardar registros.", "error");
-                return;
-            }
-
+            e.preventDefault(); if (currentRole === 'VISUALIZADOR') return;
             const editIndex = document.getElementById('editIndex').value;
             const nextNro = fiscalizaciones.length > 0 ? Math.max(...fiscalizaciones.map(i => Number(i.nro) || 0)) + 1 : 1;
-
             const item = {
                 nro: editIndex !== "" ? fiscalizaciones[editIndex].nro : nextNro,
-                unidad: document.getElementById('fUnidad').value.trim().toUpperCase(),
-                prefectura: document.getElementById('fPrefectura').value.trim().toUpperCase(),
-                zona: document.getElementById('fZona').value.trim().toUpperCase(),
-                fecha: document.getElementById('fFecha').value,
-                docSalida: document.getElementById('fDocSalida').value.trim().toUpperCase(),
-                observaciones: document.getElementById('fObservaciones').value.trim(),
-                docDescargos: document.getElementById('fDocDescargos').value.trim().toUpperCase(),
-                fechaDescargos: document.getElementById('fFechaDescargos').value,
-                estado: document.getElementById('fEstado').value,
-                modelo: document.getElementById('fModelo').value,
-                obsAdicionales: document.getElementById('fObsAdicionales').value.trim(),
-                cursosAccion: document.getElementById('fCursosAccion').value.trim()
+                unidad: document.getElementById('fUnidad').value.trim().toUpperCase(), prefectura: document.getElementById('fPrefectura').value.trim().toUpperCase(), zona: document.getElementById('fZona').value.trim().toUpperCase(), fecha: document.getElementById('fFecha').value, docSalida: document.getElementById('fDocSalida').value.trim().toUpperCase(), observaciones: document.getElementById('fObservaciones').value.trim(), docDescargos: document.getElementById('fDocDescargos').value.trim().toUpperCase(), fechaDescargos: document.getElementById('fFechaDescargos').value, estado: document.getElementById('fEstado').value, modelo: document.getElementById('fModelo').value, obsAdicionales: document.getElementById('fObsAdicionales').value.trim(), cursosAccion: document.getElementById('fCursosAccion').value.trim()
             };
-
-            try {
-                await apiWrite('saveFiscalizacion', item);
-                await new Promise(r => setTimeout(r, 800));
-                const ok = await refreshFromCloud(false);
-                if (!ok) throw new Error('No se pudo verificar el guardado en Google Sheets');
-
-                showToast(editIndex !== '' ? 'Registro actualizado en Google Sheets' : 'Fiscalización guardada en la nube', 'success');
-                closeModal();
-            } catch (error) {
-                console.error(error);
-                showToast('No fue posible guardar el registro en Google Sheets', 'error');
-            }
+            try { await apiWrite('saveFiscalizacion', item); await new Promise(r => setTimeout(r, 800)); await refreshFromCloud(false); showToast('Guardado', 'success'); closeModal(); } catch (error) { showToast('Error', 'error'); }
         }
 
-        function editFiscalizacion(index) {
-            if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: El perfil Visualizador no puede editar registros.", "error");
-                return;
-            }
-            openModal(index);
-        }
-
+        function editFiscalizacion(index) { openModal(index); }
         async function deleteFiscalizacion(index) {
-            if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: El perfil Visualizador no puede eliminar registros.", "error");
-                return;
-            }
-
-            if (!confirm(`¿Está seguro de eliminar este registro de fiscalización?`)) return;
-
-            const item = fiscalizaciones[index];
-            if (!item) return;
-
-            try {
-                await apiWrite('deleteFiscalizacion', { nro: item.nro });
-                await new Promise(r => setTimeout(r, 800));
-                const ok = await refreshFromCloud(false);
-                if (!ok) throw new Error('No se pudo verificar la eliminación');
-                showToast('Registro eliminado de Google Sheets', 'success');
-            } catch (error) {
-                console.error(error);
-                showToast('No fue posible eliminar el registro', 'error');
-            }
+            if (currentRole === 'VISUALIZADOR') return;
+            if (!confirm(`¿Eliminar?`)) return;
+            try { await apiWrite('deleteFiscalizacion', { nro: fiscalizaciones[index].nro }); await new Promise(r => setTimeout(r, 800)); await refreshFromCloud(false); showToast('Eliminado', 'success'); } catch (error) { showToast('Error', 'error'); }
         }
 
-        function clearFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('filterEstado').value = '';
-            document.getElementById('filterModelo').value = '';
-            filterData();
-        }
+        function clearFilters() { document.getElementById('searchInput').value = ''; document.getElementById('filterEstado').value = ''; document.getElementById('filterModelo').value = ''; filterData(); }
 
         function exportToExcel() {
-            if (fiscalizaciones.length === 0) {
-                showToast("No hay registros para exportar", "error");
-                return;
-            }
-
-            const dataToExport = fiscalizaciones.map((item, idx) => ({
-                "N°": idx + 1,
-                "ZONA": item.zona,
-                "PREFECTURA": item.prefectura,
-                "UNIDAD": item.unidad,
-                "FECHA": item.fecha,
-                "DOCUMENTO ELECTRÓNICO SALIDA": item.docSalida,
-                "OBSERVACIONES": item.observaciones,
-                "DOCUMENTO ELECTRÓNICO DESCARGOS": item.docDescargos,
-                "FECHA DESCARGOS": item.ESTADO,
-                "ESTADO DE TRAMITACION": item.estado,
-                "MODELO": item.modelo,
-                "OBSERVACIONES ADICIONALES": item.obsAdicionales,
-                "CURSOS DE ACCION": item.cursosAccion
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Fiscalizaciones DEPLACIC");
-            
-            XLSX.writeFile(workbook, "PLANILLA_FISCALIZACIONES_DEPLACIC.xlsx");
-            showToast("Archivo Excel exportado con éxito", "success");
+            if (fiscalizaciones.length === 0) return showToast("No hay registros", "error");
+            const data = fiscalizaciones.map((i, idx) => ({ "N°": idx + 1, "ZONA": i.zona, "PREFECTURA": i.prefectura, "UNIDAD": i.unidad, "FECHA": i.fecha, "DOC. SALIDA": i.docSalida, "OBSERVACIONES": i.observaciones, "DOC. DESCARGOS": i.docDescargos, "FECHA DESCARGOS": i.fechaDescargos, "ESTADO": i.estado, "MODELO": i.modelo, "OBS. ADICIONALES": i.obsAdicionales, "CURSOS DE ACCION": i.cursosAccion }));
+            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Fiscalizaciones"); XLSX.writeFile(wb, "FISCALIZACIONES_DEPLACIC.xlsx"); showToast("Exportado", "success");
         }
 
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastMessage.innerText = message;
-            if (type === 'success') {
-                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-lg";
-            } else if (type === 'info') {
-                toastIcon.className = "fa-solid fa-circle-info text-musgo-300 text-lg";
-            } else {
-                toastIcon.className = "fa-solid fa-triangle-exclamation text-amber-400 text-lg";
-            }
-
-            toast.classList.remove('translate-y-32', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-32', 'opacity-0');
-            }, 3500);
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast'), tMsg = document.getElementById('toastMessage'), tIcon = document.getElementById('toastIcon');
+            tMsg.innerText = msg; tIcon.className = type === 'success' ? "fa-solid fa-circle-check text-emerald-400 text-lg" : "fa-solid fa-triangle-exclamation text-amber-400 text-lg";
+            toast.classList.remove('translate-y-32', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3500);
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text.toString()
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        window.onload = function() {
-            initApp();
-        };
+        function escapeHtml(text) { return (text || '').toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+        window.onload = initApp;
     </script>
 </body>
 </html>
