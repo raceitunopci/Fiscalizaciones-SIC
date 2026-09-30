@@ -569,6 +569,88 @@
     </div>
 
     <script>
+        // ============================================================
+        // CONFIGURACIÓN GOOGLE APPS SCRIPT
+        // ============================================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyT9qtSzcPujqirpsJ-obIPNsQW3tVoOSQXbBxPqXp4p30cQKvaGixk2qRvJUS2yzrz/exec';
+        const API_TIMEOUT = 15000;
+
+        // ============================================================
+        // COMUNICACIÓN CON GOOGLE SHEETS
+        // Lectura: JSONP (funciona desde GitHub Pages sin depender de CORS).
+        // Escritura: POST simple/no-cors; después se verifica recargando desde Sheets.
+        // ============================================================
+        function apiRead(action) {
+            return new Promise((resolve, reject) => {
+                const callbackName = '__deplacic_cb_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+                const script = document.createElement('script');
+                let timer;
+
+                window[callbackName] = function(result) {
+                    clearTimeout(timer);
+                    delete window[callbackName];
+                    script.remove();
+                    if (result && result.success === false) {
+                        reject(new Error(result.message || 'Error de Google Sheets'));
+                    } else {
+                        resolve(result);
+                    }
+                };
+
+                script.onerror = function() {
+                    clearTimeout(timer);
+                    delete window[callbackName];
+                    script.remove();
+                    reject(new Error('No se pudo conectar con Google Apps Script'));
+                };
+
+                timer = setTimeout(() => {
+                    delete window[callbackName];
+                    script.remove();
+                    reject(new Error('Tiempo de espera agotado'));
+                }, API_TIMEOUT);
+
+                script.src = API_URL + '?action=' + encodeURIComponent(action) + '&callback=' + encodeURIComponent(callbackName) + '&_=' + Date.now();
+                document.head.appendChild(script);
+            });
+        }
+
+        async function apiWrite(action, data = null) {
+            const payload = JSON.stringify({ action, data });
+
+            // text/plain evita un preflight CORS. El resultado se verifica
+            // leyendo nuevamente los datos desde Google Sheets.
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: payload,
+                    keepalive: true
+                });
+                return { success: true };
+            } catch (error) {
+                console.error('Error de escritura:', error);
+                throw error;
+            }
+        }
+
+        async function refreshFromCloud(showMessage = false) {
+            try {
+                const result = await apiRead('getAll');
+                fiscalizaciones = Array.isArray(result.fiscalizaciones) ? result.fiscalizaciones : [];
+                unitsCatalog = Array.isArray(result.unidades) ? result.unidades : [];
+                updateUnitsDatalist();
+                filterData();
+                if (showMessage) showToast('Datos sincronizados con Google Sheets', 'success');
+                return true;
+            } catch (error) {
+                console.error(error);
+                showToast('No se pudo leer Google Sheets: ' + error.message, 'error');
+                return false;
+            }
+        }
+
         const defaultData = [
             {
                 nro: 1,
@@ -635,36 +717,23 @@
             { name: "PREF. MAGALLANES", lat: -53.1638, lng: -70.9171 }
         ];
 
-        function initApp() {
-            const savedFiscalizaciones = localStorage.getItem('fiscalizaciones_deplacic');
-            const savedUnits = localStorage.getItem('units_catalog_deplacic');
+        async function initApp() {
             const savedRole = localStorage.getItem('user_role_deplacic');
 
-            if (savedFiscalizaciones) {
-                try { fiscalizaciones = JSON.parse(savedFiscalizaciones); } catch(e) { fiscalizaciones = defaultData; }
-            } else {
-                fiscalizaciones = defaultData;
-            }
+            currentRole = savedRole || 'FISCALIZADOR';
+            document.getElementById('userRoleSelect').value = currentRole;
 
-            if (savedUnits) {
-                try { unitsCatalog = JSON.parse(savedUnits); } catch(e) { unitsCatalog = []; }
-            } else {
-                unitsCatalog = [
-                    { unidad: "2DA. COM COQUIMBO", prefectura: "PREF. COQUIMBO", zona: "ZONA COQUIMBO" },
-                    { unidad: "7MA. COM LA CALERA", prefectura: "PREF. VALPARAISO", zona: "ZONA VALPARAISO" }
-                ];
-            }
-
-            if (savedRole) {
-                currentRole = savedRole;
-                document.getElementById('userRoleSelect').value = currentRole;
-            }
+            fiscalizaciones = [];
+            unitsCatalog = [];
 
             applyRolePermissions();
             updateUnitsDatalist();
             filterData();
             startClock();
             initLeafletMaps();
+
+            // La fuente principal ahora es Google Sheets.
+            await refreshFromCloud(true);
         }
 
         function switchUserRole(role) {
@@ -1036,22 +1105,27 @@
         }
 
         function saveToLocalStorage() {
-            localStorage.setItem('fiscalizaciones_deplacic', JSON.stringify(fiscalizaciones));
-            localStorage.setItem('units_catalog_deplacic', JSON.stringify(unitsCatalog));
+            // Se conserva esta función por compatibilidad con el código existente.
+            // Los datos oficiales YA NO se guardan en localStorage: se guardan en Google Sheets.
             document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
         }
 
-        function resetData() {
+        async function resetData() {
             if (currentRole === 'VISUALIZADOR') {
-                showToast("Acceso denegado: El perfil Visualizador no puede modificar datos.", "error");
+                showToast("Acceso denegado: el perfil Visualizador no puede modificar datos.", "error");
                 return;
             }
-            if (confirm("¿Desea restaurar los datos iniciales? Se sobrescribirán los cambios actuales.")) {
-                fiscalizaciones = defaultData;
-                saveToLocalStorage();
-                updateUnitsDatalist();
-                filterData();
-                showToast("Datos restaurados correctamente", "success");
+
+            if (!confirm("¿Desea restaurar los datos iniciales? Esto reemplazará los registros actuales de Google Sheets.")) return;
+
+            try {
+                await apiWrite('replaceFiscalizaciones', defaultData);
+                await new Promise(r => setTimeout(r, 800));
+                await refreshFromCloud(false);
+                showToast('Datos iniciales restaurados en Google Sheets', 'success');
+            } catch (error) {
+                console.error(error);
+                showToast('No fue posible restaurar los datos', 'error');
             }
         }
 
@@ -1073,23 +1147,20 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(evt) {
+            reader.onload = async function(evt) {
                 try {
                     const data = new Uint8Array(evt.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    
+
                     const extractedMap = new Map();
                     unitsCatalog.forEach(u => extractedMap.set(u.unidad, u));
 
                     workbook.SheetNames.forEach(sheetName => {
                         const worksheet = workbook.Sheets[sheetName];
                         const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
                         if (json.length === 0) return;
 
-                        let unitCol = -1;
-                        let prefCol = -1;
-                        let zonaCol = -1;
+                        let unitCol = -1, prefCol = -1, zonaCol = -1;
 
                         for (let r = 0; r < Math.min(json.length, 8); r++) {
                             const row = json[r];
@@ -1110,19 +1181,15 @@
                             const row = json[i];
                             if (!row || row.length === 0) continue;
 
-                            let unidad = "";
-                            let prefectura = "";
-                            let zona = "";
-
-                            if (unitCol !== -1 && row[unitCol] !== undefined) unidad = row[unitCol].toString().trim().toUpperCase();
-                            if (prefCol !== -1 && row[prefCol] !== undefined) prefectura = row[prefCol].toString().trim().toUpperCase();
-                            if (zonaCol !== -1 && row[zonaCol] !== undefined) zona = row[zonaCol].toString().trim().toUpperCase();
+                            let unidad = unitCol !== -1 && row[unitCol] !== undefined ? row[unitCol].toString().trim().toUpperCase() : '';
+                            let prefectura = prefCol !== -1 && row[prefCol] !== undefined ? row[prefCol].toString().trim().toUpperCase() : '';
+                            let zona = zonaCol !== -1 && row[zonaCol] !== undefined ? row[zonaCol].toString().trim().toUpperCase() : '';
 
                             if (!unidad || !isNaN(unidad) || unidad === 'NRO.' || unidad === 'UNIDAD') {
                                 for (let c = 0; c < row.length; c++) {
                                     const cellStr = row[c] ? row[c].toString().trim().toUpperCase() : '';
                                     if (cellStr.includes('COM') || cellStr.includes('TENEN') || cellStr.includes('RETEN') || cellStr.includes('SUBCOM') || cellStr.length > 5) {
-                                        if (isNaN(cellStr) && cellStr !== 'OBSERVACIONES' && cellStr !== 'FINALIZADO' && cellStr !== 'PENDIENTE' && cellStr !== 'MICC') {
+                                        if (isNaN(cellStr) && !['OBSERVACIONES','FINALIZADO','PENDIENTE','MICC'].includes(cellStr)) {
                                             unidad = cellStr;
                                             break;
                                         }
@@ -1131,27 +1198,25 @@
                             }
 
                             if (unidad && isNaN(unidad) && unidad !== 'UNIDAD' && unidad.length > 2) {
-                                if (!extractedMap.has(unidad)) {
-                                    extractedMap.set(unidad, {
-                                        unidad: unidad,
-                                        prefectura: (prefectura && isNaN(prefectura)) ? prefectura : 'PREFECTURA GENERAL',
-                                        zona: (zona && isNaN(zona)) ? zona : 'ZONA CHILE'
-                                    });
-                                }
+                                extractedMap.set(unidad, {
+                                    unidad: unidad,
+                                    prefectura: (prefectura && isNaN(prefectura)) ? prefectura : 'PREFECTURA GENERAL',
+                                    zona: (zona && isNaN(zona)) ? zona : 'ZONA CHILE'
+                                });
                             }
                         }
                     });
 
                     unitsCatalog = Array.from(extractedMap.values());
-                    saveToLocalStorage();
-                    updateUnitsDatalist();
+                    await apiWrite('saveUnidades', unitsCatalog);
+                    await new Promise(r => setTimeout(r, 800));
+                    await refreshFromCloud(false);
 
-                    document.getElementById('unitsUploadStatus').innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> ¡Éxito! Se han incorporado ${unitsCatalog.length} unidades totales.</span>`;
-                    showToast(`Se han cargado ${unitsCatalog.length} unidades correctamente`, "success");
-
+                    document.getElementById('unitsUploadStatus').innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> ¡Éxito! Se han sincronizado ${unitsCatalog.length} unidades con Google Sheets.</span>`;
+                    showToast(`Se han guardado ${unitsCatalog.length} unidades en la nube`, 'success');
                 } catch (err) {
                     console.error(err);
-                    showToast("Error al procesar el archivo.", "error");
+                    showToast('Error al procesar o guardar el archivo.', 'error');
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -1440,7 +1505,7 @@
             document.getElementById('fiscalizacionModal').classList.add('hidden');
         }
 
-        function saveFiscalizacion(e) {
+        async function saveFiscalizacion(e) {
             e.preventDefault();
             if (currentRole === 'VISUALIZADOR') {
                 showToast("Acceso denegado: El perfil Visualizador no puede guardar registros.", "error");
@@ -1466,17 +1531,18 @@
                 cursosAccion: document.getElementById('fCursosAccion').value.trim()
             };
 
-            if (editIndex !== "") {
-                fiscalizaciones[editIndex] = item;
-                showToast("Registro y Descargos actualizados con éxito", "success");
-            } else {
-                fiscalizaciones.unshift(item);
-                showToast("Nueva fiscalización incorporada con éxito", "success");
-            }
+            try {
+                await apiWrite('saveFiscalizacion', item);
+                await new Promise(r => setTimeout(r, 800));
+                const ok = await refreshFromCloud(false);
+                if (!ok) throw new Error('No se pudo verificar el guardado en Google Sheets');
 
-            saveToLocalStorage();
-            filterData();
-            closeModal();
+                showToast(editIndex !== '' ? 'Registro actualizado en Google Sheets' : 'Fiscalización guardada en la nube', 'success');
+                closeModal();
+            } catch (error) {
+                console.error(error);
+                showToast('No fue posible guardar el registro en Google Sheets', 'error');
+            }
         }
 
         function editFiscalizacion(index) {
@@ -1487,16 +1553,26 @@
             openModal(index);
         }
 
-        function deleteFiscalizacion(index) {
+        async function deleteFiscalizacion(index) {
             if (currentRole === 'VISUALIZADOR') {
                 showToast("Acceso denegado: El perfil Visualizador no puede eliminar registros.", "error");
                 return;
             }
-            if (confirm(`¿Está seguro de eliminar este registro de fiscalización?`)) {
-                fiscalizaciones.splice(index, 1);
-                saveToLocalStorage();
-                filterData();
-                showToast("Registro eliminado correctamente", "info");
+
+            if (!confirm(`¿Está seguro de eliminar este registro de fiscalización?`)) return;
+
+            const item = fiscalizaciones[index];
+            if (!item) return;
+
+            try {
+                await apiWrite('deleteFiscalizacion', { nro: item.nro });
+                await new Promise(r => setTimeout(r, 800));
+                const ok = await refreshFromCloud(false);
+                if (!ok) throw new Error('No se pudo verificar la eliminación');
+                showToast('Registro eliminado de Google Sheets', 'success');
+            } catch (error) {
+                console.error(error);
+                showToast('No fue posible eliminar el registro', 'error');
             }
         }
 
