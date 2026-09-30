@@ -6,18 +6,14 @@
     <title>Control de Fiscalizaciones - DEPLACIC</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js for Statistics & Visuals -->
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Chart.js & SheetJS (xlsx) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- SheetJS for Excel Export & Import -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- Leaflet.js CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <!-- Leaflet.js JavaScript -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -40,13 +36,21 @@
         }
     </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .leaflet-pane, .leaflet-control, .leaflet-top, .leaflet-bottom {
+            z-index: 10 !important;
+        }
+        .modal-overlay, [id$="Modal"], .fixed.inset-0 {
+            z-index: 99999 !important;
+        }
         .chile-map-container {
             position: relative;
             background: #1e293b;
             border-radius: 0.75rem;
             overflow: hidden;
         }
-        /* Custom Leaflet Popup Theme */
         .leaflet-popup-content-wrapper, .leaflet-popup-tip {
             background-color: #1e293b !important;
             color: #f8fafc !important;
@@ -70,23 +74,34 @@
                 </div>
             </div>
 
-            <!-- Reloj en Tiempo Real Arriba al Centro -->
-            <div class="bg-musgo-900/60 border border-musgo-600/50 px-4 py-1.5 rounded-full shadow-inner flex items-center gap-2 text-xs font-medium text-slate-200">
-                <i class="fa-regular fa-clock text-amber-400"></i>
-                <span id="liveClock">Cargando fecha y hora...</span>
+            <!-- Reloj en Tiempo Real y Selector de Rol -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="bg-musgo-900/60 border border-musgo-600/50 px-4 py-1.5 rounded-full shadow-inner flex items-center gap-2 text-xs font-medium text-slate-200">
+                    <i class="fa-regular fa-clock text-amber-400"></i>
+                    <span id="liveClock">Cargando fecha y hora...</span>
+                </div>
+
+                <!-- Selector de Rol -->
+                <div class="bg-musgo-900 border border-musgo-600 px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs">
+                    <span class="text-slate-300 font-semibold"><i class="fa-solid fa-user-shield text-amber-400"></i> Perfil:</span>
+                    <select id="userRoleSelect" onchange="switchUserRole(this.value)" class="bg-musgo-800 text-white font-bold px-2 py-1 rounded border border-musgo-600 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                        <option value="FISCALIZADOR">FISCALIZADOR (Acceso Total)</option>
+                        <option value="VISUALIZADOR">VISUALIZADOR (Solo Lectura)</option>
+                    </select>
+                </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-3">
-                <button onclick="openModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
+            <div id="actionButtonsContainer" class="flex flex-wrap items-center gap-3">
+                <button onclick="openModal()" id="btnNuevaFiscalizacion" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-plus-circle"></i> Nueva Fiscalización
                 </button>
-                <button onclick="openUnitsModal()" class="bg-musgo-600 hover:bg-musgo-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm" title="Cargar archivo con unidades, prefecturas y zonas">
+                <button onclick="openUnitsModal()" id="btnCargarUnidades" class="bg-musgo-600 hover:bg-musgo-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm" title="Cargar archivo con unidades, prefecturas y zonas">
                     <i class="fa-solid fa-file-arrow-up"></i> Cargar Catálogo Unidades
                 </button>
                 <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-file-excel"></i> Exportar Excel
                 </button>
-                <button onclick="resetData()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg shadow transition text-sm" title="Restaurar datos iniciales">
+                <button onclick="resetData()" id="btnRestaurar" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg shadow transition text-sm" title="Restaurar datos iniciales">
                     <i class="fa-solid fa-rotate-right"></i>
                 </button>
             </div>
@@ -95,6 +110,14 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full space-y-6">
         
+        <div id="roleAlertBanner" class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-amber-900">
+            <div class="flex items-center gap-2">
+                <i id="roleAlertIcon" class="fa-solid fa-circle-exclamation text-amber-600 text-lg"></i>
+                <span id="roleAlertText">Modo <strong>Fiscalizador</strong> activo: Puede ingresar, editar, eliminar registros y cargar catálogos.</span>
+            </div>
+            <span class="font-semibold uppercase tracking-wider text-[10px] bg-amber-200 px-2 py-0.5 rounded text-amber-900" id="roleBadgeLabel">Control Total</span>
+        </div>
+
         <!-- Opciones de Distribución (Layout Switcher) -->
         <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div class="flex items-center gap-2 text-xs font-semibold text-slate-600">
@@ -113,7 +136,6 @@
             </div>
         </div>
 
-        <!-- Tarjetas de Estadísticas Principales -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
                 <div>
@@ -167,7 +189,6 @@
             </div>
         </div>
 
-        <!-- Contenedor Dinámico de Gráficos y Mapa según la Distribución Elegida -->
         <div id="dynamicDashboardContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Gráfico 1: Estado de Tramitación -->
             <div id="cardStatusChart" class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
@@ -225,7 +246,6 @@
             </div>
         </div>
 
-        <!-- Filtros y Búsqueda -->
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="w-full md:w-1/3 relative">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
@@ -549,6 +569,31 @@
     </div>
 
     <script>
+        // =========================================================================
+        // AQUÍ PUEDES AGREGAR TODAS LAS UNIDADES QUE QUIERAS QUE ESTÉN PRECARGADAS
+        // =========================================================================
+        const CATALOGO_UNIDADES_PRECARGADO = [
+            { unidad: "1RA. COM ARICA", prefectura: "PREF. ARICA", zona: "ZONA ARICA Y PARINACOTA" },
+            { unidad: "3RA. COM ARICA", prefectura: "PREF. ARICA", zona: "ZONA ARICA Y PARINACOTA" },
+            { unidad: "1RA. COM IQUIQUE", prefectura: "PREF. IQUIQUE", zona: "ZONA TARAPACA" },
+            { unidad: "3RA. COM ANTOFAGASTA", prefectura: "PREF. ANTOFAGASTA", zona: "ZONA ANTOFAGASTA" },
+            { unidad: "2DA. COM COPIAPO", prefectura: "PREF. ATACAMA", zona: "ZONA ATACAMA" },
+            { unidad: "1RA. COM LA SERENA", prefectura: "PREF. COQUIMBO", zona: "ZONA COQUIMBO" },
+            { unidad: "2DA. COM COQUIMBO", prefectura: "PREF. COQUIMBO", zona: "ZONA COQUIMBO" },
+            { unidad: "2DA. COM VALPARAISO", prefectura: "PREF. VALPARAISO", zona: "ZONA VALPARAISO" },
+            { unidad: "7MA. COM LA CALERA", prefectura: "PREF. VALPARAISO", zona: "ZONA VALPARAISO" },
+            { unidad: "1RA. COM SANTIAGO CENTRAL", prefectura: "PREF. SANTIAGO", zona: "ZONA METROPOLITANA" },
+            { unidad: "1RA. COM RANCAGUA", prefectura: "PREF. RANCAGUA", zona: "ZONA O'HIGGINS" },
+            { unidad: "3RA. COM TALCA", prefectura: "PREF. TALCA", zona: "ZONA MAULE" },
+            { unidad: "1RA. COM CONCEPCION", prefectura: "PREF. CONCEPCION", zona: "ZONA BIOBIO" },
+            { unidad: "2DA. COM TEMUCO", prefectura: "PREF. TEMUCO", zona: "ZONA ARAUCANIA" },
+            { unidad: "1RA. COM VALDIVIA", prefectura: "PREF. VALDIVIA", zona: "ZONA LOS RIOS" },
+            { unidad: "2DA. COM PUERTO MONTT", prefectura: "PREF. PUERTO MONTT", zona: "ZONA LOS LAGOS" },
+            { unidad: "1RA. COM COYHAIQUE", prefectura: "PREF. COYHAIQUE", zona: "ZONA AYSEN" },
+            { unidad: "1RA. COM PUNTA ARENAS", prefectura: "PREF. MAGALLANES", zona: "ZONA MAGALLANES" }
+            // Copia el formato exacto de arriba para agregar las demás.
+        ];
+
         const defaultData = [
             {
                 nro: 1,
@@ -587,17 +632,16 @@
         let filteredData = [];
         let currentPage = 1;
         const rowsPerPage = 10;
+        let currentRole = "FISCALIZADOR"; // "FISCALIZADOR" o "VISUALIZADOR"
 
         let statusChartInstance = null;
         let prefecturaChartInstance = null;
         let expandedChartInstance = null;
         let currentExpandedChartType = 'status';
 
-        // Instancias de Mapas Leaflet
         let mapInstance = null;
         let modalMapInstance = null;
 
-        // Coordenadas geográficas oficiales de cada prefectura de Chile de norte a sur
         const chilePrefecturesCoords = [
             { name: "PREF. ARICA", lat: -18.4783, lng: -70.3126 },
             { name: "PREF. IQUIQUE", lat: -20.2133, lng: -70.1503 },
@@ -619,6 +663,7 @@
         function initApp() {
             const savedFiscalizaciones = localStorage.getItem('fiscalizaciones_deplacic');
             const savedUnits = localStorage.getItem('units_catalog_deplacic');
+            const savedRole = localStorage.getItem('user_role_deplacic');
 
             if (savedFiscalizaciones) {
                 try { fiscalizaciones = JSON.parse(savedFiscalizaciones); } catch(e) { fiscalizaciones = defaultData; }
@@ -626,19 +671,71 @@
                 fiscalizaciones = defaultData;
             }
 
+            // Combinar el catálogo precargado con el guardado en localStorage (si existe)
             if (savedUnits) {
-                try { unitsCatalog = JSON.parse(savedUnits); } catch(e) { unitsCatalog = []; }
+                try { 
+                    let parsedUnits = JSON.parse(savedUnits);
+                    let combinedMap = new Map();
+                    CATALOGO_UNIDADES_PRECARGADO.forEach(u => combinedMap.set(u.unidad, u));
+                    parsedUnits.forEach(u => combinedMap.set(u.unidad, u));
+                    unitsCatalog = Array.from(combinedMap.values());
+                } catch(e) { 
+                    unitsCatalog = CATALOGO_UNIDADES_PRECARGADO; 
+                }
             } else {
-                unitsCatalog = [
-                    { unidad: "2DA. COM COQUIMBO", prefectura: "PREF. COQUIMBO", zona: "ZONA COQUIMBO" },
-                    { unidad: "7MA. COM LA CALERA", prefectura: "PREF. VALPARAISO", zona: "ZONA VALPARAISO" }
-                ];
+                unitsCatalog = CATALOGO_UNIDADES_PRECARGADO;
             }
 
+            if (savedRole) {
+                currentRole = savedRole;
+                document.getElementById('userRoleSelect').value = currentRole;
+            }
+
+            applyRolePermissions();
             updateUnitsDatalist();
             filterData();
             startClock();
             initLeafletMaps();
+        }
+
+        function switchUserRole(role) {
+            currentRole = role;
+            localStorage.setItem('user_role_deplacic', currentRole);
+            applyRolePermissions();
+            renderTable();
+            showToast(`Cambiado a perfil: ${currentRole}`, "info");
+        }
+
+        function applyRolePermissions() {
+            const btnNueva = document.getElementById('btnNuevaFiscalizacion');
+            const btnCargar = document.getElementById('btnCargarUnidades');
+            const btnRestaurar = document.getElementById('btnRestaurar');
+            const alertBanner = document.getElementById('roleAlertBanner');
+            const alertText = document.getElementById('roleAlertText');
+            const alertIcon = document.getElementById('roleAlertIcon');
+            const badgeLabel = document.getElementById('roleBadgeLabel');
+
+            if (currentRole === 'VISUALIZADOR') {
+                if (btnNueva) btnNueva.classList.add('hidden');
+                if (btnCargar) btnCargar.classList.add('hidden');
+                if (btnRestaurar) btnRestaurar.classList.add('hidden');
+
+                alertBanner.className = "bg-sky-50 border-l-4 border-sky-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-sky-900";
+                alertIcon.className = "fa-solid fa-eye text-sky-600 text-lg";
+                alertText.innerHTML = "Modo <strong>Visualizador</strong> activo: Acceso de solo lectura para consulta de estadísticas, mapas y registros.";
+                badgeLabel.className = "font-semibold uppercase tracking-wider text-[10px] bg-sky-200 px-2 py-0.5 rounded text-sky-900";
+                badgeLabel.innerText = "Solo Lectura";
+            } else {
+                if (btnNueva) btnNueva.classList.remove('hidden');
+                if (btnCargar) btnCargar.classList.remove('hidden');
+                if (btnRestaurar) btnRestaurar.classList.remove('hidden');
+
+                alertBanner.className = "bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-amber-900";
+                alertIcon.className = "fa-solid fa-circle-exclamation text-amber-600 text-lg";
+                alertText.innerHTML = "Modo <strong>Fiscalizador</strong> activo: Puede ingresar, editar, eliminar registros y cargar catálogos.";
+                badgeLabel.className = "font-semibold uppercase tracking-wider text-[10px] bg-amber-200 px-2 py-0.5 rounded text-amber-900";
+                badgeLabel.innerText = "Control Total";
+            }
         }
 
         function setLayout(layoutType) {
@@ -647,7 +744,6 @@
             const btnAnalytics = document.getElementById('layoutAnalyticsBtn');
             const btnGeospatial = document.getElementById('layoutGeospatialBtn');
 
-            // Reset button styles
             [btnClassic, btnAnalytics, btnGeospatial].forEach(b => {
                 b.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5";
             });
@@ -730,7 +826,6 @@
                 btnGeospatial.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
             }
 
-            // Re-inicializar mapa y gráficos
             mapInstance = null;
             initLeafletMaps();
             updateCharts();
@@ -978,6 +1073,10 @@
         }
 
         function resetData() {
+            if (currentRole === 'VISUALIZADOR') {
+                showToast("Acceso denegado: El perfil Visualizador no puede modificar datos.", "error");
+                return;
+            }
             if (confirm("¿Desea restaurar los datos iniciales? Se sobrescribirán los cambios actuales.")) {
                 fiscalizaciones = defaultData;
                 saveToLocalStorage();
@@ -988,6 +1087,10 @@
         }
 
         function openUnitsModal() {
+            if (currentRole === 'VISUALIZADOR') {
+                showToast("Acceso denegado: El perfil Visualizador no puede cargar catálogos.", "error");
+                return;
+            }
             document.getElementById('unitsModal').classList.remove('hidden');
             document.getElementById('unitsUploadStatus').innerText = `Catálogo actual cuenta con ${unitsCatalog.length} unidades registradas.`;
         }
@@ -1161,6 +1264,25 @@
 
                 let estadoBadgeClass = item.estado === 'FINALIZADA' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : item.estado === 'PENDIENTE' ? 'bg-amber-50 text-amber-800 border-amber-300' : 'bg-musgo-50 text-musgo-800 border-musgo-300';
 
+                let actionsHtml = `
+                    <div class="flex items-center justify-center gap-2">
+                        <button onclick="viewFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Visualizar registro">
+                            <i class="fa-solid fa-eye"></i> Ver
+                        </button>
+                `;
+
+                if (currentRole === 'FISCALIZADOR') {
+                    actionsHtml += `
+                        <button onclick="editFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-musgo-50 text-musgo-700 hover:bg-musgo-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Editar registro y descargos">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </button>
+                        <button onclick="deleteFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Eliminar registro">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </button>
+                    `;
+                }
+                actionsHtml += `</div>`;
+
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
                 tr.innerHTML = `
@@ -1177,19 +1299,7 @@
                         <span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${estadoBadgeClass}">${escapeHtml(item.estado)}</span>
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap">${modeloBadge}</td>
-                    <td class="px-4 py-3 text-center whitespace-nowrap">
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="viewFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Visualizar registro">
-                                <i class="fa-solid fa-eye"></i> Ver
-                            </button>
-                            <button onclick="editFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-musgo-50 text-musgo-700 hover:bg-musgo-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Editar registro y descargos">
-                                <i class="fa-solid fa-pen-to-square"></i> Editar
-                            </button>
-                            <button onclick="deleteFiscalizacion(${realIndex})" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-600 hover:text-white rounded-lg transition text-xs font-semibold" title="Eliminar registro">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap">${actionsHtml}</td>
                 `;
                 tableBody.appendChild(tr);
             });
@@ -1329,6 +1439,10 @@
         }
 
         function openModal(index = null) {
+            if (currentRole === 'VISUALIZADOR') {
+                showToast("Acceso denegado: El perfil Visualizador no puede ingresar registros.", "error");
+                return;
+            }
             document.getElementById('fiscalizacionModal').classList.remove('hidden');
             if (index !== null) {
                 document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editar Registro & Descargos`;
@@ -1359,8 +1473,12 @@
 
         function saveFiscalizacion(e) {
             e.preventDefault();
+            if (currentRole === 'VISUALIZADOR') {
+                showToast("Acceso denegado: El perfil Visualizador no puede guardar registros.", "error");
+                return;
+            }
+
             const editIndex = document.getElementById('editIndex').value;
-            
             const nextNro = fiscalizaciones.length > 0 ? Math.max(...fiscalizaciones.map(i => Number(i.nro) || 0)) + 1 : 1;
 
             const item = {
@@ -1393,10 +1511,18 @@
         }
 
         function editFiscalizacion(index) {
+            if (currentRole === 'VISUALIZADOR') {
+                showToast("Acceso denegado: El perfil Visualizador no puede editar registros.", "error");
+                return;
+            }
             openModal(index);
         }
 
         function deleteFiscalizacion(index) {
+            if (currentRole === 'VISUALIZADOR') {
+                showToast("Acceso denegado: El perfil Visualizador no puede eliminar registros.", "error");
+                return;
+            }
             if (confirm(`¿Está seguro de eliminar este registro de fiscalización?`)) {
                 fiscalizaciones.splice(index, 1);
                 saveToLocalStorage();
