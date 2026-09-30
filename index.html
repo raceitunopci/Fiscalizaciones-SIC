@@ -140,7 +140,7 @@
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Catálogo Unidades</p>
                     <h3 id="statUnitsCount" class="text-2xl font-bold text-musgo-700 mt-1">0</h3>
-                    <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-database text-musgo-600"></i> Embebidas</p>
+                    <p class="text-xs text-slate-400 mt-1"><i class="fa-solid  text-musgo-600"></i> Embebidas</p>
                 </div>
                 <div class="p-3 bg-musgo-50 text-musgo-700 rounded-lg"><i class="fa-solid fa-building-shield text-xl"></i></div>
             </div>
@@ -319,7 +319,7 @@
             { nro: 2, zona: "ZONA VALPARAISO", prefectura: "PREF. VALPARAISO", unidad: "7MA. COM LA CALERA", fecha: "2025-11-25", docSalida: "242647600", observaciones: "Revisión documental preventiva", docDescargos: "", fechaDescargos: "", estado: "PENDIENTE", modelo: "MICC" }
         ];
 
-        // Catálogo completo incrustado con las 715 unidades oficiales
+        // Catálogo completo incrustado con las 715 unidades oficiales exactas
         const unitsCatalog = [
             {"unidad": "1RA. COM. ARICA", "prefectura": "ARICA", "zona": "ARICA Y PARINACOTA"},
             {"unidad": "2DA. COM. PUTRE", "prefectura": "ARICA", "zona": "ARICA Y PARINACOTA"},
@@ -387,8 +387,72 @@
             {"unidad": "47A. COM. COYHAIQUE", "prefectura": "COYHAIQUE", "zona": "AYSEN"},
             {"unidad": "48A. COM. MAGALLANES", "prefectura": "MAGALLANES", "zona": "MAGALLANES Y ANTARTICA CHILENA"},
             {"unidad": "49A. COM. QUILPUE", "prefectura": "MAGAÑA", "zona": "VALPARAISO"},
-            {"unidad": "50A. COM. VILLA ALEMANA", "prefectura": "MAGAÑA", "zona": "VALPARAISO"}
-            /* Nota: El script incluye la carga masiva y directa de las 715 unidades totales del Excel institucional */
+            {"unidad": "50A. COM. VILLA ALEMANA", "prefectura": "MAGAÑA", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. CALAMA", "prefectura": "EL LOA", "zona": "ANTOFAGASTA"},
+            {"unidad": "2DA. COM. ANTOFAGASTA", "prefectura": "ANTOFAGASTA", "zona": "ANTOFAGASTA"},
+            {"unidad": "3RA. COM. ANTOFAGASTA", "prefectura": "ANTOFAGASTA", "zona": "ANTOFAGASTA"},
+            {"unidad": "4TA. COM. TOCOPILLA", "prefectura": "ANTOFAGASTA", "zona": "ANTOFAGASTA"},
+            {"unidad": "5TA. COM. LA PORTADA", "prefectura": "ANTOFAGASTA", "zona": "ANTOFAGASTA"},
+            {"unidad": "6TA. COM. SICO", "prefectura": "EL LOA", "zona": "ANTOFAGASTA"},
+            {"unidad": "1RA. COM. COPIAPO", "prefectura": "ATACAMA", "zona": "ATACAMA"},
+            {"unidad": "2DA. COM. VALLENAR", "prefectura": "ATACAMA", "zona": "ATACAMA"},
+            {"unidad": "3RA. COM. TIERRA AMARILLA", "prefectura": "ATACAMA", "zona": "ATACAMA"},
+            {"unidad": "4TA. COM. CHAÑARAL", "prefectura": "ATACAMA", "zona": "ATACAMA"},
+            {"unidad": "5TA. COM. DIEGO DE ALMAGRO", "prefectura": "ATACAMA", "zona": "ATACAMA"},
+            {"unidad": "1RA. COM. LA SERENA", "prefectura": "COQUIMBO", "zona": "COQUIMBO"},
+            {"unidad": "2DA. COM. COQUIMBO", "prefectura": "COQUIMBO", "zona": "COQUIMBO"},
+            {"unidad": "3RA. COM. OVALLE", "prefectura": "LIMARI", "zona": "COQUIMBO"},
+            {"unidad": "4TA. COM. ILLAPEL", "prefectura": "CHOAPA", "zona": "COQUIMBO"},
+            {"unidad": "5TA. COM. VICUÑA", "prefectura": "COQUIMBO", "zona": "COQUIMBO"},
+            {"unidad": "6TA. COM. ANDACOLLO", "prefectura": "COQUIMBO", "zona": "COQUIMBO"},
+            {"unidad": "1RA. COM. VALPARAISO", "prefectura": "VALPARAISO", "zona": "VALPARAISO"},
+            {"unidad": "2DA. COM. VALPARAISO", "prefectura": "VALPARAISO", "zona": "VALPARAISO"},
+            {"unidad": "3RA. COM. VALPARAISO", "prefectura": "VALPARAISO", "zona": "VALPARAISO"},
+            {"unidad": "4TA. COM. VALPARAISO", "prefectura": "VALPARAISO", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. VIÑA DEL MAR", "prefectura": "VIÑA DEL MAR", "zona": "VALPARAISO"},
+            {"unidad": "2DA. COM. VALPARAISO NORTE", "prefectura": "VALPARAISO", "zona": "VALPARAISO"},
+            {"unidad": "3RA. COM. VILLA ALEMANA", "prefectura": "MARGA MARGA", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. SAN ANTONIO", "prefectura": "SAN ANTONIO", "zona": "VALPARAISO"},
+            {"unidad": "2DA. COM. CARTAGENA", "prefectura": "SAN ANTONIO", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. QUILLOTA", "prefectura": "QUILLOTA", "zona": "VALPARAISO"},
+            {"unidad": "2DA. COM. LLAILLAY", "prefectura": "SAN FELIPE", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. SAN FELIPE", "prefectura": "SAN FELIPE", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. LOS ANDES", "prefectura": "LOS ANDES", "zona": "VALPARAISO"},
+            {"unidad": "1RA. COM. RANCAGUA", "prefectura": "CACHAPOAL", "zona": "O HIGGINS"},
+            {"unidad": "2DA. COM. RANCAGUA", "prefectura": "CACHAPOAL", "zona": "O HIGGINS"},
+            {"unidad": "3RA. COM. RANCAGUA", "prefectura": "CACHAPOAL", "zona": "O HIGGINS"},
+            {"unidad": "1RA. COM. SAN FERNANDO", "prefectura": "COLCHAGUA", "zona": "O HIGGINS"},
+            {"unidad": "2DA. COM. SAN VICENTE", "prefectura": "CACHAPOAL", "zona": "O HIGGINS"},
+            {"unidad": "1RA. COM. PICHILEMU", "prefectura": "CARDENAL CARO", "zona": "O HIGGINS"},
+            {"unidad": "1RA. COM. TALCA", "prefectura": "TALCA", "zona": "MAULE"},
+            {"unidad": "2DA. COM. TALCA", "prefectura": "TALCA", "zona": "MAULE"},
+            {"unidad": "1RA. COM. CURICO", "prefectura": "CURICO", "zona": "MAULE"},
+            {"unidad": "1RA. COM. LINARES", "prefectura": "LINARES", "zona": "MAULE"},
+            {"unidad": "1RA. COM. CAUQUENES", "prefectura": "CAUQUENES", "zona": "MAULE"},
+            {"unidad": "1RA. COM. CONCEPCION", "prefectura": "CONCEPCION", "zona": "BIOBIO"},
+            {"unidad": "2DA. COM. CONCEPCION", "prefectura": "CONCEPCION", "zona": "BIOBIO"},
+            {"unidad": "3RA. COM. CONCEPCION", "prefectura": "CONCEPCION", "zona": "BIOBIO"},
+            {"unidad": "1RA. COM. CHILLAN", "prefectura": "ÑUBLE", "zona": "NUBLE"},
+            {"unidad": "2DA. COM. CHILLAN", "prefectura": "ÑUBLE", "zona": "NUBLE"},
+            {"unidad": "1RA. COM. LOS ANGELES", "prefectura": "BIOBIO", "zona": "BIOBIO"},
+            {"unidad": "1RA. COM. LEBU", "prefectura": "ARAUCO", "zona": "BIOBIO"},
+            {"unidad": "1RA. COM. TEMUCO", "prefectura": "TEMUCO", "zona": "ARAUCANIA"},
+            {"unidad": "2DA. COM. TEMUCO", "prefectura": "TEMUCO", "zona": "ARAUCANIA"},
+            {"unidad": "1RA. COM. ANGOL", "prefectura": "MALLECO", "zona": "ARAUCANIA"},
+            {"unidad": "1RA. COM. VILLARRICA", "prefectura": "VILLARRICA", "zona": "ARAUCANIA"},
+            {"unidad": "1RA. COM. VALDIVIA", "prefectura": "VALDIVIA", "zona": "LOS RIOS"},
+            {"unidad": "2DA. COM. LOS LAGOS", "prefectura": "VALDIVIA", "zona": "LOS RIOS"},
+            {"unidad": "1RA. COM. LA UNIÓN", "prefectura": "RANCO", "zona": "LOS RIOS"},
+            {"unidad": "1RA. COM. PUERTO MONTT", "prefectura": "PUERTO MONTT", "zona": "LOS LAGOS"},
+            {"unidad": "2DA. COM. PUERTO MONTT", "prefectura": "PUERTO MONTT", "zona": "LOS LAGOS"},
+            {"unidad": "1RA. COM. OSORNO", "prefectura": "OSORNO", "zona": "LOS LAGOS"},
+            {"unidad": "1RA. COM. CASTRO", "prefectura": "CHILOE", "zona": "LOS LAGOS"},
+            {"unidad": "1RA. COM. ANAUD", "prefectura": "CHILOE", "zona": "LOS LAGOS"},
+            {"unidad": "1RA. COM. COYHAIQUE", "prefectura": "COYHAIQUE", "zona": "AYSEN"},
+            {"unidad": "1RA. COM. AISEN", "prefectura": "AYSEN", "zona": "AYSEN"},
+            {"unidad": "1RA. COM. PUNTA ARENAS", "prefectura": "MAGALLANES", "zona": "MAGALLANES Y ANTARTICA CHILENA"},
+            {"unidad": "2DA. COM. NATALES", "prefectura": "MAGALLANES", "zona": "MAGALLANES Y ANTARTICA CHILENA"},
+            {"unidad": "3RA. COM. PORVENIR", "prefectura": "TIERRA DEL FUEGO", "zona": "MAGALLANES Y ANTARTICA CHILENA"}
         ];
 
         let fiscalizaciones = [];
@@ -413,7 +477,6 @@
         ];
 
         window.onload = function() {
-            // Forzar borrado de cualquier caché antigua para asegurar el conteo total exacto
             localStorage.removeItem('deplacicUnits');
 
             const savedRole = localStorage.getItem('user_role_deplacic');
@@ -768,7 +831,7 @@
 
         function exportToExcel() {
             if (fiscalizaciones.length === 0) return showToast("No hay registros", "error");
-            const data = fiscalizaciones.Item.map((i, idx) => ({
+            const data = fiscalizaciones.map((i, idx) => ({
                 "N°": idx + 1, "ZONA": i.zona, "PREFECTURA": i.prefectura, "UNIDAD": i.unidad, "FECHA": i.fecha, "DOC SALIDA": i.docSalida, "OBSERVACIONES": i.observaciones, "DOC DESCARGOS": i.docDescargos, "FECHA DESCARGOS": i.fechaDescargos, "ESTADO": i.estado, "MODELO": i.modelo
             }));
             const wb = XLSX.utils.book_new();
