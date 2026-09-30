@@ -303,6 +303,110 @@
         </div>
     </main>
 
+    <!-- Modal Formulario Nueva/Editar Fiscalización -->
+    <div id="fiscalizacionModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden border border-slate-200 my-8">
+            <div class="bg-musgo-800 text-white px-6 py-4 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-plus-circle"></i> Nueva Fiscalización</h3>
+                <button onclick="closeModal()" class="text-slate-300 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+            <form id="fiscalizacionForm" onsubmit="saveFiscalizacion(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto text-sm text-slate-700">
+                <input type="hidden" id="editIndex" value="-1">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Zona</label>
+                        <select id="inputZona" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-musgo-600">
+                            <option value="">Seleccione Zona...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Prefectura</label>
+                        <select id="inputPrefectura" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-musgo-600">
+                            <option value="">Seleccione Prefectura...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Unidad</label>
+                        <select id="inputUnidad" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-musgo-600">
+                            <option value="">Seleccione Unidad...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha de Fiscalización</label>
+                        <input type="date" id="inputFecha" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-musgo-600">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Documento de Salida</label>
+                        <input type="text" id="inputDocSalida" placeholder="Ej: Ord. N° 123" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-musgo-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Estado de Tramitación</label>
+                        <select id="inputEstado" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-musgo-600">
+                            <option value="PENDIENTE">PENDIENTE</option>
+                            <option value="EN TRAMITE">EN TRAMITE</option>
+                            <option value="FINALIZADA">FINALIZADA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Documento de Descargos</label>
+                        <input type="text" id="inputDocDescargos" placeholder="Ej: Ord. N° 456" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-musgo-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Fecha de Descargos</label>
+                        <input type="date" id="inputFechaDescargos" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-musgo-600">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Modelo de Gestión</label>
+                        <select id="inputModelo" required class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-musgo-600">
+                            <option value="MICC">MICC</option>
+                            <option value="SIN MICC">SIN MICC</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Coordenadas (Lat, Lng)</label>
+                        <input type="text" id="inputCoords" placeholder="Ej: -33.4489, -70.6693" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-musgo-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones</label>
+                    <textarea id="inputObservaciones" rows="3" placeholder="Detalles de la fiscalización..." class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-musgo-600"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm transition">Cancelar</button>
+                    <button type="submit" class="px-5 py-2 bg-musgo-700 hover:bg-musgo-800 text-white font-medium rounded-lg text-sm shadow transition">Guardar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Carga de Unidades -->
+    <div id="unitsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200 my-8">
+            <div class="bg-musgo-800 text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-file-arrow-up"></i> Cargar Catálogo de Unidades</h3>
+                <button onclick="closeUnitsModal()" class="text-slate-300 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-slate-700">
+                <p class="text-xs text-slate-500">Suba un archivo Excel (.xlsx) o CSV que contenga columnas para <strong>Zona</strong>, <strong>Prefectura</strong> y <strong>Unidad</strong>.</p>
+                <div>
+                    <input type="file" id="unitsFileExcel" accept=".xlsx, .xls, .csv" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-musgo-50 file:text-musgo-700 hover:file:bg-musgo-100">
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-200">
+                    <button type="button" onclick="closeUnitsModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm transition">Cancelar</button>
+                    <button type="button" onclick="processUnitsFile()" class="px-5 py-2 bg-musgo-700 hover:bg-musgo-800 text-white font-medium rounded-lg text-sm shadow transition">Procesar Archivo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Ver Detalle -->
     <div id="viewModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden border border-slate-200 my-8">
@@ -316,10 +420,33 @@
                     <div><p class="text-xs font-semibold text-slate-400 uppercase">Prefectura</p><p id="viewPrefectura" class="font-bold text-slate-900 mt-0.5">-</p></div>
                     <div><p class="text-xs font-semibold text-slate-400 uppercase">Unidad</p><p id="viewUnidad" class="font-bold text-slate-900 mt-0.5">-</p></div>
                     <div><p class="text-xs font-semibold text-slate-400 uppercase">Fecha Fiscalización</p><p id="viewFecha" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Doc. Salida</p><p id="viewDocSalida" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Estado</p><p id="viewEstado" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Doc. Descargos</p><p id="viewDocDescargos" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Fecha Descargos</p><p id="viewFechaDescargos" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Modelo</p><p id="viewModelo" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                    <div><p class="text-xs font-semibold text-slate-400 uppercase">Coordenadas</p><p id="viewCoords" class="font-medium text-slate-900 mt-0.5">-</p></div>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase">Observaciones</p>
+                    <p id="viewObservaciones" class="mt-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-800">-</p>
                 </div>
                 <div class="flex justify-end pt-4 border-t border-slate-200">
                     <button type="button" onclick="closeViewModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm transition">Cerrar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ampliar Gráfico / Mapa -->
+    <div id="expandModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden border border-slate-200">
+            <div class="bg-musgo-800 text-white px-6 py-4 flex justify-between items-center">
+                <h3 id="expandModalTitle" class="text-lg font-bold flex items-center gap-2">Vista Ampliada</h3>
+                <button onclick="closeExpandModal()" class="text-slate-300 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 h-[70vh] flex items-center justify-center relative" id="expandModalContent">
+                <!-- Contenido dinámico ampliado -->
             </div>
         </div>
     </div>
@@ -362,8 +489,522 @@
             }
         }
 
+        // Datos Iniciales y Estado de la Aplicación
+        let unitsCatalog = [
+            { zona: "Zona Metropolitana", prefectura: "Prefectura Santiago Central", unidad: 33 },
+            { zona: "Zona Metropolitana", prefectura: "Prefectura Santiago Norte", unidad: 6 },
+            { zona: "Zona Valparaíso", prefectura: "Prefectura Valparaíso", unidad: 2 },
+            { zona: "Zona Biobío", prefectura: "Prefectura Concepción", unidad: 1 }
+        ];
+
+        let fiscalizaciones = [
+            {
+                zona: "Zona Metropolitana",
+                prefectura: "Prefectura Santiago Central",
+                unidad: "33",
+                fecha: "2026-06-15",
+                docSalida: "Ord. 120",
+                observaciones: "Fiscalización preventivo comunitaria en terreno.",
+                docDescargos: "Ord. 310",
+                fechaDescargos: "2026-06-25",
+                estado: "FINALIZADA",
+                modelo: "MICC",
+                coords: "-33.4489, -70.6693"
+            },
+            {
+                zona: "Zona Valparaíso",
+                prefectura: "Prefectura Valparaíso",
+                unidad: "2",
+                fecha: "2026-07-02",
+                docSalida: "Ord. 155",
+                observaciones: "Revisión de procesos operativos en unidad base.",
+                docDescargos: "",
+                fechaDescargos: "",
+                estado: "PENDIENTE",
+                modelo: "SIN MICC",
+                coords: "-33.0472, -71.6127"
+            }
+        ];
+
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let map = null;
+        let markersLayer = null;
+        let statusChartInstance = null;
+        let prefecturaChartInstance = null;
+
+        // Inicialización de la App
+        window.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            populateDropdowns();
+            renderTable();
+            renderCharts();
+            updateStats();
+
+            document.getElementById('inputZona').addEventListener('change', updatePrefecturasDropdown);
+            document.getElementById('inputPrefectura').addEventListener('change', updateUnidadesDropdown);
+        });
+
+        // Funciones de Modales
+        function openModal(editIdx = -1) {
+            document.getElementById('editIndex').value = editIdx;
+            const form = document.getElementById('fiscalizacionForm');
+            form.reset();
+
+            if (editIdx > -1) {
+                document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Fiscalización';
+                const item = fiscalizaciones[editIdx];
+                document.getElementById('inputZona').value = item.zona;
+                updatePrefecturasDropdown();
+                document.getElementById('inputPrefectura').value = item.prefectura;
+                updateUnidadesDropdown();
+                document.getElementById('inputUnidad').value = item.unidad;
+                document.getElementById('inputFecha').value = item.fecha;
+                document.getElementById('inputDocSalida').value = item.docSalida;
+                document.getElementById('inputEstado').value = item.estado;
+                document.getElementById('inputDocDescargos').value = item.docDescargos;
+                document.getElementById('inputFechaDescargos').value = item.fechaDescargos;
+                document.getElementById('inputModelo').value = item.modelo;
+                document.getElementById('inputCoords').value = item.coords || '';
+                document.getElementById('inputObservaciones').value = item.observaciones;
+            } else {
+                document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-plus-circle"></i> Nueva Fiscalización';
+                document.getElementById('inputFecha').value = new Date().toISOString().split('T')[0];
+            }
+            document.getElementById('fiscalizacionModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('fiscalizacionModal').classList.add('hidden');
+        }
+
+        function openUnitsModal() {
+            document.getElementById('unitsModal').classList.remove('hidden');
+        }
+
+        function closeUnitsModal() {
+            document.getElementById('unitsModal').classList.add('hidden');
+        }
+
         function closeViewModal() {
             document.getElementById('viewModal').classList.add('hidden');
+        }
+
+        function openViewModal(index) {
+            const item = fiscalizaciones[index];
+            document.getElementById('viewZona').textContent = item.zona || '-';
+            document.getElementById('viewPrefectura').textContent = item.prefectura || '-';
+            document.getElementById('viewUnidad').textContent = item.unidad || '-';
+            document.getElementById('viewFecha').textContent = item.fecha || '-';
+            document.getElementById('viewDocSalida').textContent = item.docSalida || 'Sin documento';
+            document.getElementById('viewEstado').textContent = item.estado || '-';
+            document.getElementById('viewDocDescargos').textContent = item.docDescargos || 'Sin descargos';
+            document.getElementById('viewFechaDescargos').textContent = item.fechaDescargos || '-';
+            document.getElementById('viewModelo').textContent = item.modelo || '-';
+            document.getElementById('viewCoords').textContent = item.coords || 'No registradas';
+            document.getElementById('viewObservaciones').textContent = item.observaciones || 'Sin observaciones registradas.';
+            document.getElementById('viewModal').classList.remove('hidden');
+        }
+
+        function openMapModal() {
+            const modal = document.getElementById('expandModal');
+            document.getElementById('expandModalTitle').innerHTML = '<i class="fa-solid fa-map-location-dot"></i> Mapa Geográfico Ampliado';
+            document.getElementById('expandModalContent').innerHTML = '<div id="modalLeafletMap" class="w-full h-full rounded-xl"></div>';
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                const modalMap = L.map('modalLeafletMap').setView([-33.4489, -70.6693], 5);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(modalMap);
+                fiscalizaciones.forEach(f => {
+                    if (f.coords) {
+                        const parts = f.coords.split(',').map(c => parseFloat(c.trim()));
+                        if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                            L.marker(parts).addTo(modalMap).bindPopup(`<b>Unidad:</b> ${f.unidad}<br><b>Estado:</b> ${f.estado}`);
+                        }
+                    }
+                });
+                modalMap.invalidateSize();
+            }, 200);
+        }
+
+        function openChartModal(type) {
+            const modal = document.getElementById('expandModal');
+            const title = type === 'status' ? 'Estado de Tramitación' : 'Prefecturas Principales';
+            document.getElementById('expandModalTitle').innerHTML = `<i class="fa-solid fa-chart-pie"></i> ${title} (Ampliado)`;
+            document.getElementById('expandModalContent').innerHTML = `<canvas id="modalChartCanvas" class="max-h-[60vh]"></canvas>`;
+            modal.classList.remove('hidden');
+
+            setTimeout(() => {
+                const ctx = document.getElementById('modalChartCanvas').getContext('2d');
+                if (type === 'status') {
+                    const finalizadas = fiscalizaciones.filter(f => f.estado === 'FINALIZADA').length;
+                    const pendientes = fiscalizaciones.filter(f => f.estado !== 'FINALIZADA').length;
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Finalizadas', 'Pendientes / Trámite'],
+                            datasets: [{ data: [finalizadas, pendientes], backgroundColor: ['#10b981', '#f59e0b'] }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                } else {
+                    const counts = {};
+                    fiscalizaciones.forEach(f => { counts[f.prefectura] = (counts[f.prefectura] || 0) + 1; });
+                    const labels = Object.keys(counts);
+                    const data = Object.values(counts);
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{ label: 'Fiscalizaciones', data: data, backgroundColor: '#3d6b52' }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                }
+            }, 200);
+        }
+
+        function closeExpandModal() {
+            document.getElementById('expandModal').classList.add('hidden');
+        }
+
+        // Gestión de Datos y Formularios
+        function saveFiscalizacion(e) {
+            e.preventDefault();
+            const editIdx = parseInt(document.getElementById('editIndex').value);
+            const newItem = {
+                zona: document.getElementById('inputZona').value,
+                prefectura: document.getElementById('inputPrefectura').value,
+                unidad: document.getElementById('inputUnidad').value,
+                fecha: document.getElementById('inputFecha').value,
+                docSalida: document.getElementById('inputDocSalida').value,
+                observaciones: document.getElementById('inputObservaciones').value,
+                docDescargos: document.getElementById('inputDocDescargos').value,
+                fechaDescargos: document.getElementById('inputFechaDescargos').value,
+                estado: document.getElementById('inputEstado').value,
+                modelo: document.getElementById('inputModelo').value,
+                coords: document.getElementById('inputCoords').value
+            };
+
+            if (editIdx > -1) {
+                fiscalizaciones[editIdx] = newItem;
+            } else {
+                fiscalizaciones.unshift(newItem);
+            }
+
+            closeModal();
+            renderTable();
+            renderCharts();
+            updateStats();
+            updateMapMarkers();
+        }
+
+        function deleteFiscalizacion(index) {
+            if (confirm('¿Está seguro de eliminar este registro de fiscalización?')) {
+                fiscalizaciones.splice(index, 1);
+                renderTable();
+                renderCharts();
+                updateStats();
+                updateMapMarkers();
+            }
+        }
+
+        function resetData() {
+            if (confirm('¿Desea restaurar los datos iniciales de prueba?')) {
+                location.reload();
+            }
+        }
+
+        // Renderizado de Tabla y Paginación
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const filtered = getFilteredData();
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginated = filtered.slice(start, end);
+
+            if (paginated.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="12" class="text-center py-6 text-slate-400">No se encontraron registros de fiscalización.</td></tr>`;
+                document.getElementById('tableInfo').textContent = `Mostrando 0 registros`;
+                document.getElementById('pageIndicator').textContent = `Página 1 de 1`;
+                return;
+            }
+
+            paginated.forEach((item, idx) => {
+                const globalIndex = start + idx;
+                const statusBadge = item.estado === 'FINALIZADA' 
+                    ? '<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">Finalizada</span>'
+                    : '<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">Pendiente</span>';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-semibold text-slate-500">${globalIndex + 1}</td>
+                    <td class="px-4 py-3">${item.zona}</td>
+                    <td class="px-4 py-3">${item.prefectura}</td>
+                    <td class="px-4 py-3 font-medium">${item.unidad}</td>
+                    <td class="px-4 py-3 text-slate-600">${item.fecha}</td>
+                    <td class="px-4 py-3">${item.docSalida || '-'}</td>
+                    <td class="px-4 py-3 truncate max-w-xs text-slate-500">${item.observaciones || '-'}</td>
+                    <td class="px-4 py-3">${item.docDescargos || '-'}</td>
+                    <td class="px-4 py-3 text-slate-600">${item.fechaDescargos || '-'}</td>
+                    <td class="px-4 py-3">${statusBadge}</td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 bg-musgo-50 text-musgo-700 rounded border border-musgo-200 text-xs font-bold">${item.modelo}</span></td>
+                    <td class="px-4 py-3 text-center flex justify-center gap-2">
+                        <button onclick="openViewModal(${globalIndex})" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Ver Detalle"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="openModal(${globalIndex})" class="p-1.5 text-amber-600 hover:bg-amber-50 rounded" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteFiscalizacion(${globalIndex})" class="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+            document.getElementById('tableInfo').textContent = `Mostrando ${start + 1} a ${Math.min(end, filtered.length)} de ${filtered.length} registros`;
+            document.getElementById('pageIndicator').textContent = `Página ${currentPage} de ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            renderTable();
+        }
+
+        function filterData() {
+            currentPage = 1;
+            renderTable();
+        }
+
+        function getFilteredData() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const estado = document.getElementById('filterEstado').value;
+            const modelo = document.getElementById('filterModelo').value;
+
+            return fiscalizaciones.filter(item => {
+                const matchQuery = Object.values(item).some(val => String(val).toLowerCase().includes(query));
+                const matchEstado = estado === "" || item.estado === estado;
+                const matchModelo = modelo === "" || item.modelo === modelo;
+                return matchQuery && matchEstado && matchModelo;
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterModelo').value = '';
+            filterData();
+        }
+
+        // Estadísticas y Gráficos
+        function updateStats() {
+            const total = fiscalizaciones.length;
+            const finalizadas = fiscalizaciones.filter(f => f.estado === 'FINALIZADA').length;
+            const pendientes = total - finalizadas;
+            const micc = fiscalizaciones.filter(f => f.modelo === 'MICC').length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statFinalizadas').textContent = finalizadas;
+            document.getElementById('statFinalizadasSub').textContent = total ? `${Math.round((finalizadas/total)*100)}% del total` : '0%';
+            document.getElementById('statPendientes').textContent = pendientes;
+            document.getElementById('statPendientesSub').textContent = total ? `${Math.round((pendientes/total)*100)}% del total` : '0%';
+            document.getElementById('statMicc').textContent = micc;
+            document.getElementById('statMiccSub').textContent = total ? `${Math.round((micc/total)*100)}% del total` : '0%';
+            document.getElementById('statUnitsCount').textContent = unitsCatalog.length;
+        }
+
+        function renderCharts() {
+            const finalizadas = fiscalizaciones.filter(f => f.estado === 'FINALIZADA').length;
+            const pendientes = fiscalizaciones.length - finalizadas;
+
+            // Gráfico Estado
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            if (statusChartInstance) statusChartInstance.destroy();
+            statusChartInstance = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Finalizadas', 'Pendientes / Trámite'],
+                    datasets: [{ data: [finalizadas || 1, pendientes], backgroundColor: ['#10b981', '#f59e0b'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // Gráfico Prefecturas
+            const counts = {};
+            fiscalizaciones.forEach(f => { counts[f.prefectura] = (counts[f.prefectura] || 0) + 1; });
+            const ctxPref = document.getElementById('prefecturaChart').getContext('2d');
+            if (prefecturaChartInstance) prefecturaChartInstance.destroy();
+            prefecturaChartInstance = new Chart(ctxPref, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(counts).length ? Object.keys(counts) : ['Sin Datos'],
+                    datasets: [{ label: 'Fiscalizaciones', data: Object.values(counts).length ? Object.values(counts) : [0], backgroundColor: '#3d6b52' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // Mapa Geográfico
+        function initMap() {
+            if (map) return;
+            map = L.map('leafletMap').setView([-33.4489, -70.6693], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+            markersLayer = L.layerGroup().addTo(map);
+            updateMapMarkers();
+        }
+
+        function updateMapMarkers() {
+            if (!markersLayer) return;
+            markersLayer.clearLayers();
+            fiscalizaciones.forEach(f => {
+                if (f.coords) {
+                    const parts = f.coords.split(',').map(c => parseFloat(c.trim()));
+                    if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                        L.marker(parts).addTo(markersLayer).bindPopup(`<b>Unidad:</b> ${f.unidad}<br><b>Estado:</b> ${f.estado}`);
+                    }
+                }
+            });
+        }
+
+        // Cargar Catálogo de Unidades por Excel
+        function processUnitsFile() {
+            const fileInput = document.getElementById('unitsFileExcel');
+            if (!fileInput.files.length) {
+                alert('Por favor seleccione un archivo Excel o CSV.');
+                return;
+            }
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+
+                    if (json.length > 0) {
+                        unitsCatalog = json.map(row => ({
+                            zona: row.Zona || row.zona || 'Sin Zona',
+                            prefectura: row.Prefectura || row.prefectura || 'Sin Prefectura',
+                            unidad: row.Unidad || row.unidad || 'Sin Unidad'
+                        }));
+                        populateDropdowns();
+                        updateStats();
+                        closeUnitsModal();
+                        alert(`¡Catálogo actualizado con éxito! Se cargaron ${unitsCatalog.length} unidades.`);
+                    } else {
+                        alert('El archivo está vacío o no tiene el formato esperado.');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Error al procesar el archivo. Verifique el formato.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Selectores en Cascada (Zona -> Prefectura -> Unidad)
+        function populateDropdowns() {
+            const zonaSelect = document.getElementById('inputZona');
+            zonaSelect.innerHTML = '<option value="">Seleccione Zona...</option>';
+            const zonas = [...new Set(unitsCatalog.map(u => u.zona))];
+            zonas.forEach(z => {
+                zonaSelect.innerHTML += `<option value="${z}">${z}</option>`;
+            });
+        }
+
+        function updatePrefecturasDropdown() {
+            const zona = document.getElementById('inputZona').value;
+            const prefSelect = document.getElementById('inputPrefectura');
+            prefSelect.innerHTML = '<option value="">Seleccione Prefectura...</option>';
+            document.getElementById('inputUnidad').innerHTML = '<option value="">Seleccione Unidad...</option>';
+
+            if (!zona) return;
+            const prefecturas = [...new Set(unitsCatalog.filter(u => u.zona === zona).map(u => u.prefectura))];
+            prefecturas.forEach(p => {
+                prefSelect.innerHTML += `<option value="${p}">${p}</option>`;
+            });
+        }
+
+        function updateUnidadesDropdown() {
+            const zona = document.getElementById('inputZona').value;
+            const prefectura = document.getElementById('inputPrefectura').value;
+            const unidadSelect = document.getElementById('inputUnidad');
+            unidadSelect.innerHTML = '<option value="">Seleccione Unidad...</option>';
+
+            if (!zona || !prefectura) return;
+            const unidades = unitsCatalog.filter(u => u.zona === zona && u.prefectura === prefectura);
+            unidades.forEach(u => {
+                unidadSelect.innerHTML += `<option value="${u.unidad}">${u.unidad}</option>`;
+            });
+        }
+
+        // Exportar a Excel
+        function exportToExcel() {
+            const wsData = fiscalizaciones.map((f, i) => ({
+                "N°": i + 1,
+                "Zona": f.zona,
+                "Prefectura": f.prefectura,
+                "Unidad": f.unidad,
+                "Fecha": f.fecha,
+                "Doc. Salida": f.docSalida,
+                "Observaciones": f.observaciones,
+                "Doc. Descargos": f.docDescargos,
+                "Fecha Descargos": f.fechaDescargos,
+                "Estado": f.estado,
+                "Modelo": f.modelo
+            }));
+            const ws = XLSX.utils.json_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Fiscalizaciones");
+            XLSX.writeFile(wb, "Control_Fiscalizaciones_DEPLACIC.xlsx");
+        }
+
+        // Control de Layouts (Distribución del Panel)
+        function setLayout(mode) {
+            const container = document.getElementById('dynamicDashboardContainer');
+            const statusCard = document.getElementById('cardStatusChart');
+            const prefCard = document.getElementById('cardPrefecturaChart');
+            const mapCard = document.getElementById('cardMap');
+
+            document.getElementById('layoutClassicBtn').className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5";
+            document.getElementById('layoutAnalyticsBtn').className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5";
+            document.getElementById('layoutGeospatialBtn').className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5";
+
+            if (mode === 'classic') {
+                document.getElementById('layoutClassicBtn').className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
+                container.className = "grid grid-cols-1 lg:grid-cols-3 gap-6";
+                statusCard.style.display = "flex";
+                prefCard.style.display = "flex";
+                mapCard.style.display = "flex";
+            } else if (mode === 'analytics') {
+                document.getElementById('layoutAnalyticsBtn').className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
+                container.className = "grid grid-cols-1 lg:grid-cols-2 gap-6";
+                statusCard.style.display = "flex";
+                prefCard.style.display = "flex";
+                mapCard.style.display = "none";
+            } else if (mode === 'geospatial') {
+                document.getElementById('layoutGeospatialBtn').className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-musgo-700 text-white shadow transition flex items-center gap-1.5";
+                container.className = "grid grid-cols-1 gap-6";
+                statusCard.style.display = "none";
+                prefCard.style.display = "none";
+                mapCard.style.display = "flex";
+                mapCard.querySelector('.chile-map-container').style.height = "500px";
+                if(map) map.invalidateSize();
+            }
+        }
+
+        function exportChartImage(type) {
+            const chartObj = type === 'status' ? statusChartInstance : prefecturaChartInstance;
+            if (!chartObj) return;
+            const url = chartObj.toBase64Image();
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `grafico_${type}.png`;
+            a.click();
         }
     </script>
 </body>
