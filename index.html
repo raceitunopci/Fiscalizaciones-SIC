@@ -63,7 +63,7 @@
             <!-- Reloj y Selector de Rol -->
             <div class="flex flex-wrap items-center gap-3">
                 <div class="bg-musgo-900/60 border border-musgo-600/50 px-4 py-1.5 rounded-full shadow-inner flex items-center gap-2 text-xs font-medium text-slate-200">
-                    <i class="fa-regular fa-clock text-amber-400"></i>
+                    <i class="fa-solid fa-clock text-amber-400"></i>
                     <span id="liveClock">Cargando fecha y hora...</span>
                 </div>
 
@@ -81,7 +81,7 @@
                     <i class="fa-solid fa-plus-circle"></i> Nueva Fiscalización
                 </button>
                 <button onclick="openUnitsModal()" id="btnCargarUnidades" class="bg-musgo-600 hover:bg-musgo-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-file-arrow-up"></i> Cargar Catálogo
+                    <i class="fa-solid fa-building-shield"></i> Catálogo Unidades
                 </button>
                 <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg shadow transition flex items-center gap-2 text-sm">
                     <i class="fa-solid fa-file-excel"></i> Exportar Excel
@@ -98,7 +98,7 @@
         <div id="roleAlertBanner" class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-amber-900">
             <div class="flex items-center gap-2">
                 <i id="roleAlertIcon" class="fa-solid fa-circle-exclamation text-amber-600 text-lg"></i>
-                <span id="roleAlertText">Modo <strong>Fiscalizador</strong> activo: Puede ingresar, editar, eliminar registros y cargar catálogos.</span>
+                <span id="roleAlertText">Modo <strong>Fiscalizador</strong> activo: Puede ingresar, editar, eliminar registros y consultar catálogos.</span>
             </div>
             <span class="font-semibold uppercase tracking-wider text-[10px] bg-amber-200 px-2 py-0.5 rounded text-amber-900" id="roleBadgeLabel">Control Total</span>
         </div>
@@ -140,7 +140,7 @@
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Catálogo Unidades</p>
                     <h3 id="statUnitsCount" class="text-2xl font-bold text-musgo-700 mt-1">0</h3>
-                    <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-database text-musgo-600"></i> Registradas</p>
+                    <p class="text-xs text-slate-400 mt-1"><i class="fa-brands fa-google-drive text-musgo-600"></i> Sincronizadas</p>
                 </div>
                 <div class="p-3 bg-musgo-50 text-musgo-700 rounded-lg"><i class="fa-solid fa-building-shield text-xl"></i></div>
             </div>
@@ -230,17 +230,12 @@
     <div id="unitsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 my-8">
             <div class="bg-musgo-800 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-file-arrow-up text-amber-400"></i> Cargar Catálogo de Unidades</h3>
+                <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-building-shield text-amber-400"></i> Catálogo de Unidades Integrado</h3>
                 <button onclick="closeUnitsModal()" class="text-slate-300 hover:text-white text-2xl font-bold">&times;</button>
             </div>
             <div class="p-6 space-y-4">
-                <p class="text-sm text-slate-600">Suba un archivo Excel (.xlsx, .xls) con el listado oficial de Unidades, Prefecturas y Zonas.</p>
-                <div class="border-2 border-dashed border-slate-300 hover:border-musgo-600 rounded-xl p-6 text-center cursor-pointer bg-slate-50 transition" onclick="document.getElementById('unitsFileInput').click()">
-                    <i class="fa-solid fa-cloud-arrow-up text-musgo-700 text-3xl mb-2"></i>
-                    <p class="text-sm font-semibold text-slate-700">Haga clic para seleccionar archivo Excel</p>
-                    <input type="file" id="unitsFileInput" accept=".xlsx, .xls" class="hidden" onchange="handleUnitsFile(event)">
-                </div>
-                <div id="unitsUploadStatus" class="text-xs text-slate-600 bg-slate-100 p-3 rounded-lg border border-slate-200">Catálogo actual cuenta con 0 unidades.</div>
+                <p class="text-sm text-slate-600">El catálogo oficial completo se encuentra sincronizado con Google Drive para auto-completar los datos correctamente.</p>
+                <div id="unitsUploadStatus" class="text-xs text-slate-700 bg-slate-100 p-3 rounded-lg border border-slate-200 font-medium">Catálogo activo: Unidades integradas desde Drive.</div>
                 <div class="flex justify-end pt-2"><button type="button" onclick="closeUnitsModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg text-sm">Cerrar</button></div>
             </div>
         </div>
@@ -277,7 +272,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Unidad *</label>
-                        <input type="text" id="fUnidad" list="unitsList" oninput="onUnidadInput(this.value)" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm" placeholder="Seleccione Unidad">
+                        <input type="text" id="fUnidad" list="unitsList" oninput="onUnidadInput(this.value)" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm" placeholder="Seleccione o escriba Unidad">
                         <datalist id="unitsList"></datalist>
                     </div>
                     <div>
@@ -317,15 +312,15 @@
     <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUPAw-nAU7t6nvYocxUgNYKp2qGPpDrqD1qAZvhz-8Sx2cyFp5IY0U-xnVVehGZWPRrA/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjPGDypH1HMiyI1m2LZ9Y7xEvlATrpTvcXNQE3YKSyio3ha3TXuVPvA17ovZ_D4HpxUg/exec';
 
         const defaultFiscalizaciones = [
             { nro: 1, zona: "ZONA COQUIMBO", prefectura: "PREF. COQUIMBO", unidad: "2DA. COM COQUIMBO", fecha: "2025-11-21", docSalida: "242442087", observaciones: "Fiscalización inicial programa MICC", docDescargos: "245823413", fechaDescargos: "2026-01-14", estado: "FINALIZADA", modelo: "MICC" },
             { nro: 2, zona: "ZONA VALPARAISO", prefectura: "PREF. VALPARAISO", unidad: "7MA. COM LA CALERA", fecha: "2025-11-25", docSalida: "242647600", observaciones: "Revisión documental preventiva", docDescargos: "", fechaDescargos: "", estado: "PENDIENTE", modelo: "MICC" }
         ];
 
-        let fiscalizaciones = [];
         let unitsCatalog = [];
+        let fiscalizaciones = [];
         let filteredData = [];
         let currentPage = 1;
         const rowsPerPage = 10;
@@ -346,7 +341,9 @@
             { name: "PREF. MAGALLANES", lat: -53.1638, lng: -70.9171 }
         ];
 
-        window.onload = function() {
+        window.onload = async function() {
+            localStorage.removeItem('deplacicUnits');
+
             const savedRole = localStorage.getItem('user_role_deplacic');
             currentRole = savedRole || 'FISCALIZADOR';
             document.getElementById('userRoleSelect').value = currentRole;
@@ -356,19 +353,32 @@
                 fiscalizaciones = storedF ? JSON.parse(storedF) : [...defaultFiscalizaciones];
             } catch(e) { fiscalizaciones = [...defaultFiscalizaciones]; }
 
-            try {
-                const storedU = localStorage.getItem('deplacicUnits');
-                unitsCatalog = storedU ? JSON.parse(storedU) : [];
-            } catch(e) { unitsCatalog = []; }
-
             applyRolePermissions();
-            updateUnitsDatalist();
+            
+            await loadUnitsFromDrive();
+            
             applyFilters();
             startClock();
             initLeafletMap();
             initCharts();
-            showToast("Sistema cargado desde memoria local", "success");
         };
+
+        async function loadUnitsFromDrive() {
+            try {
+                document.getElementById('statUnitsCount').innerText = "Cargando...";
+                const response = await fetch(SCRIPT_URL + '?action=getUnits');
+                const data = await response.json();
+                
+                unitsCatalog = data;
+                updateUnitsDatalist(); 
+                document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
+                showToast("Catálogo de unidades cargado desde Drive", "success");
+            } catch (error) {
+                console.error("Error al cargar unidades:", error);
+                showToast("Error al cargar unidades desde Drive", "error");
+                document.getElementById('statUnitsCount').innerText = "Error";
+            }
+        }
 
         function switchUserRole(role) {
             currentRole = role;
@@ -380,8 +390,6 @@
 
         function applyRolePermissions() {
             const btnNueva = document.getElementById('btnNuevaFiscalizacion');
-            const btnCargar = document.getElementById('btnCargarUnidades');
-            const btnRestaurar = document.getElementById('btnRestaurar');
             const alertBanner = document.getElementById('roleAlertBanner');
             const alertText = document.getElementById('roleAlertText');
             const alertIcon = document.getElementById('roleAlertIcon');
@@ -389,8 +397,6 @@
 
             if (currentRole === 'VISUALIZADOR') {
                 if (btnNueva) btnNueva.classList.add('hidden');
-                if (btnCargar) btnCargar.classList.add('hidden');
-                if (btnRestaurar) btnRestaurar.classList.add('hidden');
                 alertBanner.className = "bg-sky-50 border-l-4 border-sky-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-sky-900";
                 alertIcon.className = "fa-solid fa-eye text-sky-600 text-lg";
                 alertText.innerHTML = "Modo <strong>Visualizador</strong> activo: Solo lectura.";
@@ -398,8 +404,6 @@
                 badgeLabel.innerText = "Solo Lectura";
             } else {
                 if (btnNueva) btnNueva.classList.remove('hidden');
-                if (btnCargar) btnCargar.classList.remove('hidden');
-                if (btnRestaurar) btnRestaurar.classList.remove('hidden');
                 alertBanner.className = "bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl shadow-sm flex items-center justify-between text-xs sm:text-sm text-amber-900";
                 alertIcon.className = "fa-solid fa-circle-exclamation text-amber-600 text-lg";
                 alertText.innerHTML = "Modo <strong>Fiscalizador</strong> activo: Control Total.";
@@ -493,7 +497,7 @@
             document.getElementById('statPendientesSub').innerText = `${total ? (pen/total*100).toFixed(1) : 0}% del total`;
             document.getElementById('statMicc').innerText = micc;
             document.getElementById('statMiccSub').innerText = `${total ? (micc/total*100).toFixed(1) : 0}% del total`;
-            document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
+            document.getElementById('statUnitsCount').innerText = unitsCatalog.length || 0; 
         }
 
         function applyFilters() {
@@ -637,7 +641,6 @@
             closeModal();
             showToast('Guardado localmente con éxito', 'success');
 
-            // Sincronización silenciosa con Google Drive
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -679,41 +682,9 @@
         }
 
         function openUnitsModal() {
-            if (currentRole === 'VISUALIZADOR') return;
             document.getElementById('unitsModal').classList.remove('hidden');
         }
         function closeUnitsModal() { document.getElementById('unitsModal').classList.add('hidden'); }
-
-        function handleUnitsFile(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(evt) {
-                try {
-                    const data = new Uint8Array(evt.target.result);
-                    const wb = XLSX.read(data, { type: 'array' });
-                    const sheet = wb.Sheets[wb.SheetNames[0]];
-                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                    
-                    const extracted = [];
-                    json.forEach(row => {
-                        if (row && row.length >= 2 && row[0] && isNaN(row[0])) {
-                            extracted.push({ unidad: String(row[0]).trim().toUpperCase(), prefectura: String(row[1] || '').trim().toUpperCase(), zona: String(row[2] || '').trim().toUpperCase() });
-                        }
-                    });
-                    if (extracted.length > 0) {
-                        unitsCatalog = extracted;
-                        localStorage.setItem('deplacicUnits', JSON.stringify(unitsCatalog));
-                        updateUnitsDatalist();
-                        showToast(`Cargadas ${unitsCatalog.length} unidades`, 'success');
-                        closeUnitsModal();
-                    } else {
-                        showToast('No se detectaron datos válidos en el Excel', 'warning');
-                    }
-                } catch(err) { showToast('Error al procesar el archivo', 'error'); }
-            };
-            reader.readAsArrayBuffer(file);
-        }
 
         function updateUnitsDatalist() {
             const datalist = document.getElementById('unitsList');
@@ -723,7 +694,7 @@
                 opt.value = u.unidad;
                 datalist.appendChild(opt);
             });
-            document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
+            document.getElementById('statUnitsCount').innerText = unitsCatalog.length || 0;
         }
 
         function onUnidadInput(val) {
