@@ -367,16 +367,26 @@
             try {
                 document.getElementById('statUnitsCount').innerText = "Cargando...";
                 const response = await fetch(SCRIPT_URL + '?action=getUnits');
-                const data = await response.json();
                 
-                unitsCatalog = data;
-                updateUnitsDatalist(); 
-                document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
-                showToast("Catálogo de unidades cargado desde Drive", "success");
+                // Leemos la respuesta como texto primero para diagnosticar
+                const text = await response.text(); 
+                
+                try {
+                    // Intentamos convertir el texto a JSON
+                    const data = JSON.parse(text); 
+                    unitsCatalog = data;
+                    updateUnitsDatalist(); 
+                    document.getElementById('statUnitsCount').innerText = unitsCatalog.length;
+                    showToast("Catálogo de unidades cargado desde Drive", "success");
+                } catch (jsonError) {
+                    console.error("Error procesando JSON. Respuesta del servidor:", text);
+                    showToast("Error de formato en los datos", "error");
+                    document.getElementById('statUnitsCount').innerText = "Error Datos";
+                }
             } catch (error) {
-                console.error("Error al cargar unidades:", error);
-                showToast("Error al cargar unidades desde Drive", "error");
-                document.getElementById('statUnitsCount').innerText = "Error";
+                console.error("Error de red o conexión:", error);
+                showToast("Error de conexión con el servidor", "error");
+                document.getElementById('statUnitsCount').innerText = "Error Red";
             }
         }
 
@@ -715,7 +725,7 @@
         function exportToExcel() {
             if (fiscalizaciones.length === 0) return showToast("No hay registros", "error");
             const data = fiscalizaciones.map((i, idx) => ({
-                "N°": idx + 1, "ZONA": i.zona, "PREFECTURA": i.prefectura, "UNIDAD": i.unidad, "FECHA": i.fecha, "DOC SALIDA": i.docSalida, "OBSERVACIONES": i.observaciones, "DOC DESCARGOS": i.docDescargos, "FECHA DESCARGOS": i.fechaDescargos, "ESTADO": i.estado, "MODELO": i.modelo
+                "N°": idx + 1, "ZONA": i.zona, "PREFECTURA": i.prefectura, "UNIDAD": i.unidad, "FECHA": i.fecha, "DOC SALIDA": i.docSalida, "OBSERVACIONES": i.observaciones, "DOC DESCARGOS": i.docDescargos, "FECHA DESCARGOS": i.ESTADO, "MODELO": i.modelo
             }));
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Fiscalizaciones");
